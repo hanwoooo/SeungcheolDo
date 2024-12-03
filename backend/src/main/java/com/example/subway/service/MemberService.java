@@ -28,16 +28,23 @@ public class MemberService {
         // dto -> entity 변환
         MemberEntity memberEntity = MemberEntity.toMemberEntity(signUpDto);
 
+<<<<<<< HEAD
         memberEntity.setMemberName(signUpDto.getMemberName());
         memberEntity.setMemberPassword(signUpDto.getMemberPassword());
 
+=======
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         // save
         memberRepository.save(memberEntity);
         return true; // 회원가입 성공
     }
 
     // 로그인
+<<<<<<< HEAD
     public LoginDto login(LoginDto loginDTO) {
+=======
+    public boolean login(LoginDto loginDTO) {
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         /*
             1. 사용자가 입력한 이메일이 DB에 있는지 조회
             2. 있다면 비밀번호가 일치하는지 판단
@@ -46,6 +53,7 @@ public class MemberService {
         if (byMemberEmail.isPresent()) {
             // 조회 결과가 있다.
             MemberEntity memberEntity = byMemberEmail.get();
+<<<<<<< HEAD
             if(memberEntity.getMemberPassword().equals(loginDTO.getMemberPassword())) {
                 // 비밀번호 일치
                 LoginDto dto = LoginDto.toMemberDTO(memberEntity);
@@ -57,14 +65,29 @@ public class MemberService {
         } else {
             // 조회 결과가 없다.
             return null;
+=======
+            // 비밀번호 일치
+            if(memberEntity.getMemberPassword().equals(loginDTO.getMemberPassword())) {
+                return true;
+            } else {
+                // 비밀번호 불일치
+                return false;
+            }
+        } else {
+            // 조회 결과가 없다.
+            return false;
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         }
     }
 
     public MemberEntity getMemberFromSession(HttpSession session) {
         String memberEmail = (String) session.getAttribute("memberEmail");
+<<<<<<< HEAD
         if (memberEmail == null) {
             return null;
         }
+=======
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         return findByMemberEmail(memberEmail);
     }
 

@@ -12,9 +12,13 @@ public class SubwayApplication {
 		SpringApplication.run(SubwayApplication.class, args);
 	}
 
+<<<<<<< HEAD
 }
 
 
 
 
 
+=======
+}
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2

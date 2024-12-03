@@ -2,6 +2,10 @@ package com.example.subway.controller;
 
 import com.example.subway.dto.RouteInfoDto;
 import com.example.subway.service.RouteInfoService;
+<<<<<<< HEAD
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +17,10 @@ public class RouteInfoController {
 
     private final RouteInfoService routeInfoService;
 
+<<<<<<< HEAD
+=======
+    @Autowired
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     public RouteInfoController(RouteInfoService routeInfoService) {
         this.routeInfoService = routeInfoService;
     }

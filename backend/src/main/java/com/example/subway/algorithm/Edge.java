@@ -16,6 +16,7 @@ public class Edge {
         this.cost = cost; //비용
         this.line =line; //호선
     }
+<<<<<<< HEAD
     // equals와 hashCode 메서드를 오버라이드하여 동일한 출발-도착 경로인지 비교
     @Override
     public boolean equals(Object obj) {
@@ -29,4 +30,6 @@ public class Edge {
     public int hashCode() {
         return Objects.hash(destination, time, distance, cost, line);
     }
+=======
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 }

@@ -1,6 +1,9 @@
 package com.example.subway.entity;
 
+<<<<<<< HEAD
 import com.example.subway.dto.LoginDto;
+=======
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 import com.example.subway.dto.SignUpDto;
 import jakarta.persistence.*;
 import lombok.Data;

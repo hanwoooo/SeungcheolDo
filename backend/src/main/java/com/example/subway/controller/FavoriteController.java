@@ -31,7 +31,11 @@ public class FavoriteController {
     public ResponseEntity<List<StationDto>> getMemberFavorites(HttpSession session) {
         MemberEntity member = memberService.getMemberFromSession(session);
 
+<<<<<<< HEAD
         List<StationDto> favoriteList = favoriteService.getFavorites(member.getId());
+=======
+        List<StationDto> favoriteList = favoriteService.getFavorites(member);
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         return ResponseEntity.ok(favoriteList);
     }
 
@@ -41,9 +45,12 @@ public class FavoriteController {
         MemberEntity member = memberService.getMemberFromSession(session);
 
         Long stationId = stationService.findStationIdByStationName(stationName);
+<<<<<<< HEAD
         if (stationId == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 역");
         }
+=======
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 
         boolean alreadyExists = favoriteService.isFavoriteExists(member.getId(), stationId);
         if (alreadyExists) {
@@ -59,10 +66,13 @@ public class FavoriteController {
     public ResponseEntity<String> deleteFavorite(HttpSession session, @RequestParam String stationName) {
         MemberEntity member = memberService.getMemberFromSession(session);
         Long stationId = stationService.findStationIdByStationName(stationName);
+<<<<<<< HEAD
 
         if (stationId == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 역");
         }
+=======
+>>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         favoriteService.deleteFavorite(member.getId(), stationId);
         return ResponseEntity.ok("삭제 성공");
     }
