@@ -1,5 +1,6 @@
 import { colors } from "@/constants/colors";
 
+// 역 호선별 색깔 정의
 export type LineColor = 'RED' | 'YELLOW' | 'BROWN' | 'GREEN' | 'LIGHT_GREEN' | 'BLUE' | 'SKY_BLUE' | 'NAVY' | 'PURPLE';
 
 export interface connectedStationsInfo {
