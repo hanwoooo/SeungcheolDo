@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapScreen from '@/components/Map/MapHomeScreen/MapScreen';
 import SearchButton from '@/components/Map/Button/SearchButton';
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { searchStation } from '@/api/auth';
 import { StationData, StationInformation } from '@/types/domain';
@@ -25,6 +25,14 @@ function MapHomeScreen() {
   const [stationData, setStationData] = useState<StationData | null>(null);
   const [currentLine, setCurrentLine] = useState<string | null>(null);
   const bottomSheetRef = React.useRef(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params?.stationName) {
+        setSelectedStationName(route.params.stationName);
+      }
+    }, [route.params?.stationName])
+  );
 
   // 선택된 역 데이터 가져오기
   useEffect(() => {

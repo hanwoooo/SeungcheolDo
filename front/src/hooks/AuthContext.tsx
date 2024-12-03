@@ -47,6 +47,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (result && result.valueResults) {
+      setTransfer(result.valueResults.transfer);
+    }
+  }, [result]);
+  
+  useEffect(() => {
     if (isLogin) {
       fetchFavorites();
     } else {

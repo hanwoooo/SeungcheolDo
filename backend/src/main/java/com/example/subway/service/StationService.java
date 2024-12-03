@@ -2,10 +2,7 @@ package com.example.subway.service;
 
 import com.example.subway.dto.StationDetailDto;
 import com.example.subway.dto.StationDto;
-<<<<<<< HEAD
-=======
 import com.example.subway.entity.MemberEntity;
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 import com.example.subway.entity.RouteEntity;
 import com.example.subway.entity.StationEntity;
 import com.example.subway.repository.RouteRepository;
@@ -30,10 +27,7 @@ public class StationService {
         this.routeRepository = routeRepository;
     }
 
-<<<<<<< HEAD
-=======
     // 전체 역 리스트
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     public List<StationDto> getAllStation() {
         List<StationEntity> stationEntityList = stationRepository.findAll();
         List<StationDto> stationDtoList = new ArrayList<>();
@@ -43,10 +37,7 @@ public class StationService {
         return stationDtoList;
     }
 
-<<<<<<< HEAD
-=======
     // 역 이름으로 역 찾기
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     public StationDto findStationByStationName(String stationName) {
         Optional<StationEntity> station = stationRepository.findByStationName(stationName);
         if (station.isPresent()) {
@@ -56,10 +47,7 @@ public class StationService {
         }
     }
 
-<<<<<<< HEAD
-=======
     // 역 이름으로 역 ID 찾기
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     public Long findStationIdByStationName(String stationName) {
         Optional<Long> stationId = stationRepository.findStationIdByStationName(stationName);
         if (stationId.isPresent()) {
@@ -69,24 +57,14 @@ public class StationService {
         }
     }
 
-<<<<<<< HEAD
-
-    @Transactional
-    public List<StationDto> findAllStationsWithoutFavorites(Long memberId) {
-=======
     // (전체 역 - 즐겨찾기 된 역) 리스트
     @Transactional
     public List<StationDto> findAllStationsWithoutFavorites(MemberEntity member) {
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         // 전체 역 리스트
         List<StationDto> allStations = getAllStation();
 
         // 회원의 즐겨찾기 역 리스트
-<<<<<<< HEAD
-        List<StationDto> favoriteStations = favoriteService.getFavorites(memberId);
-=======
         List<StationDto> favoriteStations = favoriteService.getFavorites(member);
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 
         // 즐겨찾기한 역 제외한 역 리스트 생성
         List<StationDto> stationsWithoutFavorites = new ArrayList<>();
@@ -101,31 +79,18 @@ public class StationService {
         return stationsWithoutFavorites;
     }
 
-<<<<<<< HEAD
-
-=======
     // 역 이름으로 자세한 역 정보 검색
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     public StationDetailDto findStationDetailByName(String stationName) {
         // 주어진 역 이름으로 StationEntity 조회
         Optional<StationEntity> station = stationRepository.findByStationName(stationName);
 
-<<<<<<< HEAD
-        // 역이 존재하지 않으면 예외를 던짐
-=======
         // 역이 존재하면
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         if (station.isPresent()) {
             Long stationId = station.get().getId();
 
             // 해당 역과 연결된 모든 경로를 조회
             List<RouteEntity> connectedRoutes = routeRepository.findConnectedRoutesByStationId(stationId);
 
-<<<<<<< HEAD
-            // 노선별로 연결된 역 정보를 담을 리스트 생성
-            List<StationDetailDto.LineDirectionInfo> connectedStations = new ArrayList<>();
-=======
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 
             // 노선별로 LineDirectionInfo 객체를 저장할 맵 생성
             Map<String, StationDetailDto.LineDirectionInfo> lineDirectionMap = new HashMap<>();
@@ -143,10 +108,7 @@ public class StationService {
                 // 도착역이 현재 역인 경우
                 if (stationId.equals(arrivalStationId)) {
                     String direction = "previous"; // 도착역
-<<<<<<< HEAD
-=======
                     // 예외
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
                     if (stationId == 1) {
                         direction = "next";
                     }
@@ -162,10 +124,7 @@ public class StationService {
                 // 출발역이 현재 역인 경우
                 if (stationId.equals(departureStationId)) {
                     String direction = "next"; //
-<<<<<<< HEAD
-=======
                     // 예외
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
                     if (stationId == 1) {
                         direction = "previous";
                     }
@@ -182,22 +141,13 @@ public class StationService {
                 lineDirectionMap.put(line, lineDirectionInfo);
             }
 
-<<<<<<< HEAD
-            // 맵에 저장된 정보를 리스트로 변환하여 반환
-            connectedStations.addAll(lineDirectionMap.values());
-=======
             // 맵에 저장된 정보를 리스트로 취합
             List<StationDetailDto.LineDirectionInfo> connectedStations = new ArrayList<>(lineDirectionMap.values());
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 
             // 조회된 역과 연결된 역들에 대한 정보를 담은 DTO 반환
             return new StationDetailDto(station.get().getStationName(), connectedStations);
         }
 
-<<<<<<< HEAD
-        // 역이 존재하지 않으면 예외를 던짐
-=======
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         return null;
     }
 
@@ -237,21 +187,12 @@ public class StationService {
                 if ((stationId == 49 && connectedStationId == 47) || (stationId == 47 && connectedStationId == 49)
                         || (stationId == 55 && connectedStationId == 15) || (stationId == 15 && connectedStationId == 55)
                         || (stationId == 65 && connectedStationId == 39) || (stationId == 39 && connectedStationId == 65)) {
-<<<<<<< HEAD
-                    return stationId < connectedStationId ? "216방면" : "104방면";
-                }
-                if (stationId > connectedStationId) {
-                    return "216방면";
-                } else if (stationId < connectedStationId) {
-                    return "104방면";
-=======
                     return stationId < connectedStationId ? "104방면" : "216방면";
                 }
                 if (stationId > connectedStationId) {
                     return "104방면";
                 } else if (stationId < connectedStationId) {
                     return "216방면";
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
                 }
                 break;
             case "5":

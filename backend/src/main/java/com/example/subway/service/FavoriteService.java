@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class FavoriteService {
@@ -49,34 +48,16 @@ public class FavoriteService {
     }
 
     @Transactional // 해당 메서드의 모든 작업이 하나의 트랜잭션 내에서 수행되도록 설정
-<<<<<<< HEAD
-    public List<StationDto> getFavorites(Long memberId) {
-        // 멤버 조회
-        Optional<MemberEntity> member = memberRepository.findById(memberId);
-
-        // 멤버가 없으면 null 반환
-        if (member.isEmpty()) {
-            return null;
-        }
-
-        // 해당 멤버의 즐겨찾기 리스트를 stationName 기준 내림차순으로 정렬하여 조회
-        List<FavoriteEntity> favorites = favoriteRepository.findByMemberOrderByStation_StationNameAsc(member.get());
-=======
     public List<StationDto> getFavorites(MemberEntity member) {
 
 
         // 해당 멤버의 즐겨찾기 리스트를 stationName 기준 오름차순으로 정렬하여 조회
         List<FavoriteEntity> favorites = favoriteRepository.findByMemberOrderByStation_StationNameAsc(member);
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
 
         // FavoriteEntity를 StationDto로 변환하여 반환
         List<StationDto> stationDtoList = new ArrayList<>();
         for (FavoriteEntity favoriteEntity : favorites) {
-<<<<<<< HEAD
-            stationDtoList.add(new StationDto(favoriteEntity.getStation()));
-=======
             stationDtoList.add(StationDto.toStationDTO(favoriteEntity.getStation()));
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         }
 
         return stationDtoList;

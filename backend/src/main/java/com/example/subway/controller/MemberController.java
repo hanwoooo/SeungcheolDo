@@ -34,41 +34,18 @@ public class MemberController {
     // 로그인
     @PostMapping("/members/login")
     public ResponseEntity<String> login(HttpServletRequest request, @RequestBody LoginDto loginDto) {
-<<<<<<< HEAD
-        LoginDto member = memberService.login(loginDto);
-
-        if (member != null) {
-            // 세션 생성
-            HttpSession session = request.getSession();
-            session.setAttribute("memberEmail", member.getMemberEmail());
-=======
         boolean isLogin = memberService.login(loginDto);
 
         if (isLogin) {
             // 세션 생성
             HttpSession session = request.getSession();
             session.setAttribute("memberEmail", loginDto.getMemberEmail());
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
         }
     }
 
-<<<<<<< HEAD
-    // 프로필보기
-    @GetMapping("/members/profile")
-    public ResponseEntity<ProfileDto> getProfile(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // 세션이 없으면 null을 반환
-        if (session != null && session.getAttribute("memberEmail") != null) {
-            String memberEmail = (String) session.getAttribute("memberEmail");
-            MemberEntity member = memberService.findByMemberEmail(memberEmail);
-            ProfileDto profileDto = ProfileDto.toProfileDto(member);
-            return ResponseEntity.ok(profileDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-=======
     // 회원 정보
     @GetMapping("/members/profile")
     public ResponseEntity<ProfileDto> getProfile(HttpServletRequest request) {
@@ -77,21 +54,14 @@ public class MemberController {
         MemberEntity member = memberService.findByMemberEmail(memberEmail);
         ProfileDto profileDto = ProfileDto.toProfileDto(member);
         return ResponseEntity.ok(profileDto);
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     }
 
     // 로그아웃
     @GetMapping("/members/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // 기존 세션이 있을 때만 가져옴
-<<<<<<< HEAD
-        if (session != null) {
-            session.invalidate(); // 세션 무효화, 세션에 저장된 모든 데이터 삭제
-        }
-=======
         session.invalidate(); // 세션 무효화, 세션에 저장된 모든 데이터 삭제
 
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
         return ResponseEntity.ok("Logout successful");
     }
 }

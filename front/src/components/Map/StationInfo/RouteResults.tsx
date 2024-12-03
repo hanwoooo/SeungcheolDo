@@ -37,6 +37,7 @@ function RouteResults() {
           barWidth={barWidth}
           currentLeft={currentLeft}
           routeColor={routeColor}
+          transfer={transfer}
         />
       );
     });

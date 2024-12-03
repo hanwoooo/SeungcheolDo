@@ -24,15 +24,6 @@ public class StationController {
         this.memberService = memberService;
     }
 
-<<<<<<< HEAD
-    // 전체 역 반환
-    @GetMapping("/stations")
-    public ResponseEntity<List<StationDto>> getAllStations() {
-        return ResponseEntity.ok(stationService.getAllStation());
-    }
-
-=======
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     // 역 검색
     @PostMapping("/stations")
     public ResponseEntity<StationDto> findStationByName(@RequestParam String stationName) {
@@ -60,11 +51,7 @@ public class StationController {
     public ResponseEntity<List<StationDto>> findAllStationsWithoutFavorites(HttpSession session) {
 
         MemberEntity member = memberService.getMemberFromSession(session);
-<<<<<<< HEAD
-        return ResponseEntity.ok(stationService.findAllStationsWithoutFavorites(member.getId()));
-=======
         return ResponseEntity.ok(stationService.findAllStationsWithoutFavorites(member));
->>>>>>> 98fd4697b1b97f6c1cab97773c4812e2fc6ad1e2
     }
 
 }

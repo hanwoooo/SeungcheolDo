@@ -3,10 +3,8 @@ package com.example.subway.repository;
 import com.example.subway.entity.FavoriteEntity;
 import com.example.subway.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FavoriteRepository extends JpaRepository<FavoriteEntity, Long> {
 
