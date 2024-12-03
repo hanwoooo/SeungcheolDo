@@ -1,0 +1,97 @@
+import React, { useRef, useMemo, useState, useEffect } from "react";
+import { View, StyleSheet, Text } from "react-native";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { colors, mapNavigations } from "@/constants";
+import MapScreen from "@/components/MapScreen";
+import SearchButton from "@/components/SearchButton";
+import { StackScreenProps } from "@react-navigation/stack";
+import { MapStackParamList } from "@/navigations/stack/MapStackNavigator";
+
+type MapHomeScreenProps = StackScreenProps<
+  MapStackParamList,
+  typeof mapNavigations.MAP_HOME
+>;
+
+function MapHomeScreen({ navigation, route }: MapHomeScreenProps) {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["10%", "30%"], []);
+
+  // StationSearch에서 전달된 데이터 상태 관리
+  const [stationData, setStationData] = useState<any | null>(null);
+
+  // route.params로 전달된 데이터 확인
+  useEffect(() => {
+    if (route.params?.stationData) {
+      setStationData(route.params.stationData); // 데이터를 상태에 저장
+      bottomSheetRef.current?.snapToIndex(1); // Bottom Sheet를 활성화
+    }
+  }, [route.params]);
+
+  const handleSearchPress = () => {
+    navigation.navigate(mapNavigations.STATION_SEARCH); // StationSearch로 이동
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* 검색 버튼 */}
+      <View style={styles.searchInputContainer}>
+        <SearchButton onPress={handleSearchPress} />
+      </View>
+
+      {/* 지도 화면 */}
+      <MapScreen />
+
+      {/* Bottom Sheet */}
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={stationData ? 1 : -1} // 데이터가 없으면 Bottom Sheet 숨김
+        snapPoints={snapPoints}
+      >
+        <BottomSheetView style={styles.bottomSheetContent}>
+          {stationData ? (
+            <View>
+              {/* 전달된 데이터 표시 */}
+              <Text style={styles.stationName}>
+                역 이름: {stationData.stationName}
+              </Text>
+              <Text>이전 역: {stationData.connectedStations.previous}</Text>
+              <Text>다음 역: {stationData.connectedStations.next}</Text>
+            </View>
+          ) : (
+            <View>
+              {/* 데이터가 없을 때 기본 메시지 */}
+              <Text>정보가 없습니다. 검색 후 확인해주세요.</Text>
+            </View>
+          )}
+        </BottomSheetView>
+      </BottomSheet>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.GRAY_100,
+    position: "relative",
+  },
+  searchInputContainer: {
+    position: "absolute", // 화면에서 고정
+    top: 30, // 화면 상단에서의 위치
+    left: 16,
+    right: 16,
+    zIndex: 10, // 다른 요소보다 위에 렌더링
+  },
+  bottomSheetContent: {
+    flex: 1,
+    alignItems: "center",
+    padding: 20,
+  },
+  stationName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+});
+
+export default MapHomeScreen;

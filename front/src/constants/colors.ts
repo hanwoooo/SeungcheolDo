@@ -1,0 +1,27 @@
+const colors = {
+  WHITE: '#FFF',
+  RED_300: '#FFB4B4',
+  RED_500: '#FF5F5F',
+  YELLOW_500: "#F4F400",
+  BLUE_200: '#2190FF',
+  BLUE_500: '#007FFF',
+  BLUE_700: '#0365C7',
+  // #1C44A8 명지대 컬러임 근데 위에가 더 이쁜거 같기도?
+  LINE_RED: '#FF0000',
+  LINE_LIGHT_GREEN: '#92D050',
+  LINE_GREEN: '#00AF50',
+  LINE_BROWN: '#943835',
+  LINE_SKY_BLUE: '#00AFEF',
+  LINE_BLUE: '#487DBA',
+  LINE_NAVY: '#082363',
+  LINE_PURPLE: '#6F2E9F',
+  LINE_YELLOW: '#FFC004',
+  GRAY_100: '#F8F8F8',
+  GRAY_200: '#E7E7E7',
+  GRAY_300: '#DADADA',
+  GRAY_500: '#8E8E8E',
+  GRAY_700: '#575757',
+  BLACK: '#000',
+};
+
+export {colors};
