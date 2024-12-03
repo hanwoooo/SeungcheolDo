@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useAuthContext } from '@/hooks/AuthContext';
 import { colors } from '@/constants';
 import RouteBar from './RouteBar';
 import RouteSummary from './RouteSummary';
 import RouteDetails from './RouteDetails';
 import { getLineColor } from '@/types/domain';
+import InsideStationButton from './InsideStationButton';
 
 function RouteResults() {
-  const { result } = useAuthContext();
+  const { result, arrival, transfer } = useAuthContext();
   const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
 
   const toggleAccordion = (index: number) => {
@@ -46,7 +47,7 @@ function RouteResults() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <RouteSummary
         time={result.valueResults.time}
         distance={result.valueResults.distance}
@@ -55,6 +56,7 @@ function RouteResults() {
       <View style={styles.routeBarContainer}>
         {renderRouteBars()}
       </View>
+
       <View style={styles.routes}>
 
         {result.routeResults.map((route, index) => (
@@ -67,7 +69,14 @@ function RouteResults() {
           />
         ))}
       </View>
-    </View>
+      <View style={{
+        height: 700, flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}>
+        <Text style={{ color: colors.WHITE }}>도착 역 내부경로버튼 라인</Text>
+        <InsideStationButton stationName={arrival} />
+      </View>
+    </ScrollView>
   );
 }
 

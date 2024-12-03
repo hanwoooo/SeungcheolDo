@@ -98,7 +98,7 @@ export type DijkstraResult = {
 export type InsideStationPath = {
   line: string;
   stationName: string;
-  isTransfer: boolean;
+  stationType: 'departure' | 'transfer' | 'arrival';
 };
 
 export type InsideStationImageURL = {

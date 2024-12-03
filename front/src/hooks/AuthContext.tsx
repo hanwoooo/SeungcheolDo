@@ -20,6 +20,8 @@ interface AuthContextType {
   setWaypoints: (waypoints: string[]) => void;
   result: DijkstraResult | null;
   setResult: (result: DijkstraResult | null) => void;
+  transfer: number;
+  setTransfer: (transfer: number) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -33,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [arrival, setArrival] = useState<string>('도착 역 선택');
   const [waypoints, setWaypoints] = useState<string[]>([]);
   const [result, setResult] = useState<DijkstraResult | null>(null);
+  const [transfer, setTransfer] = useState<number>(0);
 
   const fetchFavorites = async () => {
     try {
@@ -71,6 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setWaypoints,
         result,
         setResult,
+        transfer,
+        setTransfer,
       }}
     >
       {children}
