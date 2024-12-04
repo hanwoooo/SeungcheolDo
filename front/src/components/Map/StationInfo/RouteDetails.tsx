@@ -30,7 +30,7 @@ function RouteDetails({ route, index, expandedIndexes, toggleAccordion }: RouteD
       <View style={styles.routeContainer}>
         <View style={styles.lineContainer}>
           <Text style={styles.line}>{route.line}호선</Text>
-          <InsideStationButton stationName={route.path[0]} />
+          <InsideStationButton stationName={route.path[0]} line={route.line} index={index} />
         </View>
         <View style={styles.pathContainer}>
           <Text style={styles.pathInfo}>{route.path.length}개 역 이동</Text>

@@ -37,7 +37,6 @@ function RouteResults() {
           barWidth={barWidth}
           currentLeft={currentLeft}
           routeColor={routeColor}
-          transfer={transfer}
         />
       );
     });
@@ -75,7 +74,7 @@ function RouteResults() {
         justifyContent: 'space-between',
       }}>
         <Text style={{ color: colors.WHITE }}>도착 역 내부경로버튼 라인</Text>
-        <InsideStationButton stationName={arrival} />
+        <InsideStationButton stationName={arrival} line={result.routeResults[transfer].line} index={transfer+1} />
       </View>
     </ScrollView>
   );

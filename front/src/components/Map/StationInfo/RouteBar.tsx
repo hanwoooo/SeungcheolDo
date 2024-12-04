@@ -10,10 +10,9 @@ interface RouteBarProps {
   barWidth: number;
   currentLeft: number;
   routeColor: string;
-  transfer: number;
 }
 
-function RouteBar({ route, barWidth, currentLeft, routeColor, transfer }: RouteBarProps) {
+function RouteBar({ route, barWidth, currentLeft, routeColor }: RouteBarProps) {
   return (
     <React.Fragment>
       <View
