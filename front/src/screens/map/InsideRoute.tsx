@@ -14,16 +14,14 @@ import {
   gyroscope,
   setUpdateIntervalForType,
   SensorTypes,
-} from 'react-native-sensors'; //
+} from 'react-native-sensors';
 import {postCoordsData} from '@/api/auth';
 import {CoordsData, InsideStationCoordinates} from '@/types/domain';
-import { useAuthContext } from '@/hooks/AuthContext';
-import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {useAuthContext} from '@/hooks/AuthContext';
+import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import {RouteProp, useRoute} from '@react-navigation/native';
 
-
-type RouteProps = RouteProp<MapStackParamList, "InsideRoute">;
-
+type RouteProps = RouteProp<MapStackParamList, 'InsideRoute'>;
 
 const {width, height} = Dimensions.get('window');
 const mapWidth = 277;
@@ -87,22 +85,18 @@ class KalmanFilter {
   }
 }
 
-const postcoordsData = async (stationInfo: InsideStationCoordinates) => {
+const coordsData = async (stationInfo: InsideStationCoordinates) => {
   try {
     // postCoordsData 호출
-    const response: CoordsData = await postCoordsData(stationInfo);
+    const response = await postCoordsData(stationInfo);
 
     // 서버 응답 데이터 확인
-    console.log('서버 응답 데이터:', response);
-
-    if (!response || !response.coords) {
-      console.error('서버에서 빈 응답을 받았습니다.');
-      return []; // 빈 배열 반환
-    }
+    console.log('서버 응답 데이터:', response, typeof(response));
 
     const result: {x: number; y: number}[] = [];
     // 응답 데이터를 '/'로 분리
-    const array = response.coords.split('/');
+    const array = String(response).split('/');
+    console.log(array);
     array.forEach(coords => {
       if (coords.trim()) {
         const xy = coords.split(',').map(val => parseFloat(val.trim()));
@@ -113,12 +107,12 @@ const postcoordsData = async (stationInfo: InsideStationCoordinates) => {
         }
       }
     });
-    if (stationInfo.stationType === 'arrival'){
+    if (stationInfo.stationType === 'arrival') {
       result.reverse(); // 도착이면 개찰구에서 출구로 가는 방향으로 길 안내
     }
 
     // 변환된 데이터 확인
-    console.log('변환된 좌표 데이터:', result);
+    console.log('변환된 좌표 데이터:', result[0]);
     return result;
   } catch (error) {
     console.error('POST 요청 중 오류:', error);
@@ -138,7 +132,15 @@ function InsideRoute() {
   const [lastMagnitude, setLastMagnitude] = useState<number>(0); // 합성가속도 값 state
   const [angleZ, setAngleZ] = useState<number>(0); // 각도 state
   const route = useRoute<RouteProps>();
-  const { line, stationName, insideImage, stationType } = route.params;
+  const {line, stationName, insideImage, stationType} = route.params;
+  // stationInfo 객체 정의
+  const stationInfo: InsideStationCoordinates = {
+    line,
+    stationName,
+    stationType,
+    exitNum: '',
+    // 필요에 따라 추가 필드들 추가
+  };
   // 애니메이션 값
   const positionX = useRef<Animated.Value>(new Animated.Value(0)).current;
   const positionY = useRef<Animated.Value>(new Animated.Value(0)).current;
@@ -161,16 +163,45 @@ function InsideRoute() {
   };
 
   // 버튼 선택 시 작동 함수
-  const handleButtonPress = async (index: number) => {
+  const routeButtonPress = async (index: number) => {
     setActivePath(index); // 버튼 변경을 위함.
 
     // exitNum을 업데이트한 stationData 생성
     const updatedStationData = {
-      ...StationInfo,
+      ...stationInfo,
       exitNum: (index + 1).toString(),
     }; // 여기서 index 별로 exitNum 변경
     try {
-      const selectedPath = await postcoordsData(updatedStationData); // 이걸 서버에서 받아온 경로로 사용
+      const selectedPath = await coordsData(updatedStationData);
+      if (selectedPath.length > 0) {
+        setCurrentCoordinates(selectedPath);
+      }
+
+      // 지도 내부 좌표계를 기준으로 초기 위치 계산
+      const {x, y} = selectedPath[0];
+      console.log(x,y);
+      const offsetX = x - mapWidth / 2;
+      const offsetY = y - mapHeight / 2;
+
+      // currentPosition 상태 업데이트
+      setCurrentPosition({x: offsetY, y: offsetX});
+
+      // 애니메이션 이미지의 위치 설정
+      positionX.setValue(offsetY); // Y축은 상하
+      positionY.setValue(offsetX); // X축은 좌우
+
+      // x 좌표에 따른 초기 회전 각도 설정
+      const initialAngle = calculateFirstangle(x, y);
+      rotationZ.setValue(-initialAngle); // 애니메이션 이미지 각도 설정
+      setAngleZ(-initialAngle); // 각도 업데이트
+    } catch (error) {
+      console.error('경로 요청 중 오류:', error);
+    }
+  };
+  // 버튼 선택 시 작동 함수
+  const handleButtonPress = async () => {
+    try {
+      const selectedPath = await coordsData(stationInfo); // 이걸 서버에서 받아온 경로로 사용
       if (selectedPath.length > 0) {
         setCurrentCoordinates(selectedPath);
       }
@@ -252,9 +283,24 @@ function InsideRoute() {
     };
   }, [angleZ, lastMagnitude, currentPosition]);
 
+  const fullImagePath = `http://192.168.0.12:8080${insideImage}`;
+
   return (
     <View style={styles.container}>
-      {!(StationInfo.stationType === 'transfer') && (
+      {stationInfo.stationType === 'transfer' ? (
+        <>
+          <Text style={styles.text}>경로를 확인하려면 눌러주세요!</Text>
+          <View style={styles.buttonContainer}>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => handleButtonPress()}>
+                <Text style={[styles.buttonText, styles.activeButtonText]}>
+                  경로확인
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      ) : (
         <>
           <Text style={styles.text}>출입구를 선택해주세요!</Text>
           <View style={styles.buttonContainer}>
@@ -265,7 +311,7 @@ function InsideRoute() {
                   styles.circleButton,
                   activePath === index && styles.activeButton,
                 ]}
-                onPress={() => handleButtonPress(index)}>
+                onPress={() => routeButtonPress(index)}>
                 <Text
                   style={[
                     styles.buttonText,
@@ -280,7 +326,9 @@ function InsideRoute() {
       )}
       <View style={styles.imageContainer}>
         {/* 여기 이미지 서버에서 받으면 변경 예정 */}
-        {insideImage && <Image source={require(insideImage)} style={[styles.map]} />}
+        {insideImage && (
+          <Image source={{uri: fullImagePath}} style={[styles.map]} />
+        )}
         <Svg width={mapWidth} height={mapHeight} style={{position: 'absolute'}}>
           {activePath !== null && currentCoordinates.length > 0 && (
             <Polyline
@@ -292,7 +340,7 @@ function InsideRoute() {
           )}
         </Svg>
         <Animated.Image
-          source={require('./assets/subway_person.png')}
+          source={require('../../assets/subway_person.png')}
           style={[
             styles.image,
             {
