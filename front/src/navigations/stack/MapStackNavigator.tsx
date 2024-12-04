@@ -6,6 +6,7 @@ import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import StationSearch from '@/screens/map/StationSearch';
 import StationInfo from '@/screens/map/StationInfo';
 import InsideRoute from '@/screens/map/InsideRoute';
+import { InsideStationImageURL } from '@/types/domain';
 
 export type MapStackParamList = {
   [mapNavigations.MAP_HOME]: { 
@@ -23,8 +24,8 @@ export type MapStackParamList = {
   [mapNavigations.INSIDE_ROUTE]: {
     line: string;
     stationName: string;
-    connectedStationName: string;
-    isTransfer: boolean;
+    insideImage: string;
+    stationType: 'departure' | 'transfer' | 'arrival';
   };
 };
 

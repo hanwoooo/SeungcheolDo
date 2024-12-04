@@ -9,7 +9,7 @@ import { getLineColor } from '@/types/domain';
 import InsideStationButton from './InsideStationButton';
 
 function RouteResults() {
-  const { result, arrival, transfer } = useAuthContext();
+  const { result, arrival } = useAuthContext();
   const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
 
   const toggleAccordion = (index: number) => {
@@ -74,7 +74,8 @@ function RouteResults() {
         justifyContent: 'space-between',
       }}>
         <Text style={{ color: colors.WHITE }}>도착 역 내부경로버튼 라인</Text>
-        <InsideStationButton stationName={arrival} line={result.routeResults[transfer].line} index={transfer+1} />
+        <InsideStationButton stationName={arrival} line={result.routeResults[result.routeResults.length - 1].line} index={999} />
+        {/*도착역이란걸 표시하기 위해 999 사용*/}
       </View>
     </ScrollView>
   );

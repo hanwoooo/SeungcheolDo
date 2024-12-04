@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { StationData, Stationlist, DijkstraResult } from '@/types/domain';
+import { StationData, Stationlist, DijkstraResult, InsideStationImageURL } from '@/types/domain';
 import { getFavorite } from '@/api/auth';
 
 interface AuthContextType {
@@ -20,8 +20,10 @@ interface AuthContextType {
   setWaypoints: (waypoints: string[]) => void;
   result: DijkstraResult | null;
   setResult: (result: DijkstraResult | null) => void;
-  transfer: number;
-  setTransfer: (transfer: number) => void;
+  insideImage: string;
+  setInsideImage: (image: string) => void;
+  stationType: 'departure' | 'transfer' | 'arrival';
+  setStationType: (type: 'departure' | 'transfer' | 'arrival') => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -35,8 +37,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [arrival, setArrival] = useState<string>('도착 역 선택');
   const [waypoints, setWaypoints] = useState<string[]>([]);
   const [result, setResult] = useState<DijkstraResult | null>(null);
-  const [transfer, setTransfer] = useState<number>(0);
-
+  const [insideImage, setInsideImage] = useState<string>("기본이미지");
+  const [stationType, setStationType] = useState<'departure' | 'transfer' | 'arrival'>('departure');
   const fetchFavorites = async () => {
     try {
       const data = await getFavorite();
@@ -45,12 +47,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Failed to fetch favorites:', error);
     }
   };
-
-  useEffect(() => {
-    if (result && result.valueResults) {
-      setTransfer(result.valueResults.transfer);
-    }
-  }, [result]);
   
   useEffect(() => {
     if (isLogin) {
@@ -80,8 +76,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setWaypoints,
         result,
         setResult,
-        transfer,
-        setTransfer,
+        insideImage,
+        setInsideImage,
+        stationType,
+        setStationType,
       }}
     >
       {children}

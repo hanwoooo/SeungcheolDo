@@ -82,7 +82,7 @@ export const postRoute = async ({ departure, arrival, option, waypoints }: Route
   return data;
 };
 
-export const postInsideStationURL = async ({ line, stationName, stationType }: InsideStationPath): Promise<InsideStationImageURL> => {
+export const postInsideStationURL = async ({ line, stationName, stationType }: InsideStationPath): Promise<string> => {
   const { data } = await apiClient.post("/route-info/image-path", {
     line: line,
     stationName: stationName,
