@@ -111,7 +111,3 @@ export type InsideStationCoordinates = {
   exitNum: string;
   stationType: 'departure' | 'transfer' | 'arrival';
 };
-
-export type CoordsData = {
-  coords: string;
-};
