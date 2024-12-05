@@ -39,8 +39,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 18,
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
+    margin: 5,
+    borderWidth: 1,
     borderColor: colors.GRAY_500,
+    borderRadius: 20,
   },
   stationName: {
     fontSize: 23,

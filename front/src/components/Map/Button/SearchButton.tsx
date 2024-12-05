@@ -12,7 +12,9 @@ interface SearchButtonProps {
 function SearchButton({ onPress }: SearchButtonProps) {
   return (
     <View style={styles.container}>
-      <DrawerButton />
+      <View style={styles.buttonContainer}>
+        <DrawerButton />
+      </View>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <View style={styles.textContainer}>
           <Text style={styles.buttonText}>역 검색</Text>
@@ -68,6 +70,10 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginLeft: 10, // 버튼과 아이콘 간의 간격
+  },
+  buttonContainer: {
+    marginLeft: 5,
+    justifyContent: 'center',
   },
 });
 

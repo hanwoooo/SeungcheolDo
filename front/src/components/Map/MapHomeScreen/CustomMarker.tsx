@@ -1,6 +1,6 @@
 import { colors } from "@/constants/colors";
 import React from "react";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 interface CustomMarkerProps {
@@ -24,7 +24,7 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
       onPress={onPress}
     >
       <View style={styles.markerIcon}>
-        <Ionicons style={styles.Icon} name="location-outline" size={60} color="white" />
+        <Image source={require('@/assets/마커.png')} style={styles.markerImage} />
       </View>
       <Text style={styles.label}>{stationName}</Text>
     </TouchableOpacity>
@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "black",
     textAlign: "center",
+  },
+  markerImage: {
+    width: 40,
+    height: 63,
   },
 });
 

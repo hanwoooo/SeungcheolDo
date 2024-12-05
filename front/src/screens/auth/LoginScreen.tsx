@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { SafeAreaView, StyleSheet, TextInput, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, TextInput, View } from "react-native";
 import InputField from "@/components/InputField";
 import CustomButton from "@/components/CustomButton";
 import useForm from "@/hooks/useForm";
@@ -8,7 +8,7 @@ import useAuth from "@/hooks/useAuth";
 
 function LoginScreen() {
   const passwordRef = useRef<TextInput | null>(null);
-  const {loginMutation} = useAuth();
+  const { loginMutation } = useAuth();
   const login = useForm({
     initialValue: { email: '', password: '', },
     validate: validateLogin,
@@ -21,6 +21,7 @@ function LoginScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
+        <Image source={require('@/assets/크레파스로고.png')} style={styles.logo} />
         <InputField
           autoFocus
           placeholder="이메일"
@@ -58,11 +59,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 30,
+    marginTop: 200,
   },
   inputContainer: {
     gap: 20,
     marginBottom: 30,
-  }
+  },
+  logo: {
+    alignSelf: 'center',
+    width: '100%',
+    height: 230,
+  },
 });
 
 export default LoginScreen;

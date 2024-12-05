@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { useAuthContext } from '@/hooks/AuthContext';
 import { colors } from '@/constants';
 import RouteBar from './RouteBar';
@@ -43,7 +43,11 @@ function RouteResults() {
   };
 
   if (!result) {
-    return <Text>경로 정보를 불러오는 중입니다...</Text>;
+    return (
+      <View style={styles.logoContainer}>
+        <Image source={require('@/assets/크레파스로고.png')} style={styles.logo} />
+      </View>
+    );
   }
 
   return (
@@ -74,7 +78,7 @@ function RouteResults() {
         justifyContent: 'space-between',
       }}>
         <Text style={{ color: colors.WHITE }}>도착 역 내부경로버튼 라인</Text>
-        <InsideStationButton stationName={arrival} line={result.routeResults[result.routeResults.length - 1].line} index={999} />
+        <InsideStationButton stationName={arrival} connectedStation={result.routeResults[result.routeResults.length - 1].path[result.routeResults[result.routeResults.length - 1].path.length - 2]} line={result.routeResults[result.routeResults.length - 1].line} index={999} />
         {/*도착역이란걸 표시하기 위해 999 사용*/}
       </View>
     </ScrollView>
@@ -98,6 +102,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.GRAY_300,
     paddingTop: 10,
+  },
+  logoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 430,
+    height: 200,
   },
 });
 

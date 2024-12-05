@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
 import {
   getStationList,
-  searchStation,
   addFavorite,
   delFavorite,
   getFavorite,
@@ -10,11 +9,11 @@ import {
 } from "@/api/auth"; // 서버 API로 변경
 import SearchInput from "@/components/SearchInput";
 import StationItem from "@/components/BookMark/StationItem";
-import { Stationlist } from "@/types/domain";
+import { StationInformation, Stationlist } from "@/types/domain";
 
 const BookMarkScreen = () => {
   const [stationList, setStationList] = useState<Stationlist>([]);
-  const [searchResult, setSearchResult] = useState<Stationlist>([]);
+  const [searchResult, setSearchResult] = useState<StationInformation | null>(null);
   const [favorites, setFavorites] = useState<Stationlist>([]);
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -46,6 +45,7 @@ const BookMarkScreen = () => {
   const handleSearchSubmit = async () => {
     if (!searchText) return;
     try {
+      setIsSearching(true); // 검색 상태로 전환
       const data = await isStation({ stationName: searchText });
       setSearchResult(data);
     } catch (error) {
@@ -55,9 +55,10 @@ const BookMarkScreen = () => {
 
   const handleClearSearch = () => {
     setSearchText(""); // 검색어 초기화
-    setSearchResult([]); // 검색 결과 초기화
+    setSearchResult(null); // 검색 결과 초기화
     setIsSearching(false); // 검색 상태 해제
   };
+
   // 즐겨찾기 추가
   const handleAddFavorite = async (stationName: string) => {
     try {
@@ -94,24 +95,21 @@ const BookMarkScreen = () => {
         onClear={handleClearSearch}
       />
 
-      {/* 검색 결과 */}
-      {searchResult.length > 0 ? (
+      {/* 검색 상태일 때 검색 결과만 표시 */}
+      {isSearching && searchResult ? (
         <View>
           <Text style={styles.sectionTitle}>검색 결과</Text>
-          {searchResult.map((item) => (
-            <StationItem
-              key={item.stationName}
-              stationName={item.stationName}
-              isFavorite={favorites.some((fav) => fav.stationName === item.stationName)}
-              onAddFavorite={() => handleAddFavorite(item.stationName)}
-              onRemoveFavorite={() => handleRemoveFavorite(item.stationName)}
-            />
-          ))}
+          <StationItem
+            key={searchResult.stationName}
+            stationName={searchResult.stationName}
+            isFavorite={favorites.some((fav) => fav.stationName === searchResult.stationName)}
+            onAddFavorite={() => handleAddFavorite(searchResult.stationName)}
+            onRemoveFavorite={() => handleRemoveFavorite(searchResult.stationName)}
+          />
         </View>
       ) : (
         <View>
           <Text style={styles.sectionTitle}>즐겨찾기</Text>
-          {/* 즐겨찾기 리스트 */}
           {favorites.map((item) => (
             <StationItem
               key={item.stationName}

@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: colors.GRAY_200,
-    padding: deviceHeight > 700 ? 15 : 10,
+    padding: 30,
   },
   input: {
     fontSize: 16,

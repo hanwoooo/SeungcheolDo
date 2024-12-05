@@ -17,7 +17,7 @@ function AuthHomeScreen({ navigation }: AuthHomeScreenProps) {
         <Image
           resizeMode='contain'
           style={styles.image}
-          source={require('../../assets/firstLogo.png')}
+          source={require('../../assets/크레파스.png')}
         />
       </View>
       <View style={styles.buttonContainer}>
@@ -42,12 +42,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
+    marginTop: 200,
     flex: 1.5,
     width: Dimensions.get('screen').width,
   },
   image: {
-    width: '100%',
-    height: '100%',
+    alignSelf: 'center',
+    width: '90%',
+    height: '90%',
   },
   buttonContainer: {
     flex: 1,

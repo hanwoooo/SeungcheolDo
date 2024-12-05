@@ -12,9 +12,9 @@ const BookMark: React.FC<BookMarkProps> = ({ isFavorite, onToggleFavorite }) => 
   return (
     <TouchableOpacity onPress={onToggleFavorite} style={styles.container}>
       <Ionicons
-        name="star" // 아이콘 이름
-        size={40} // 아이콘 크기
-        color={isFavorite ? colors.YELLOW_500 : colors.GRAY_200} // 상태에 따른 색상
+        name="star"
+        size={40}
+        color={isFavorite ? colors.YELLOW_500 : colors.GRAY_200}
       />
     </TouchableOpacity>
   );

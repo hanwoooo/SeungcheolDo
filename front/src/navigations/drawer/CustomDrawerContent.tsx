@@ -25,7 +25,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
               />}
             {memberImage !== null && (
               <Image
-                source={{ uri: 'http://192.168.0.76:8080' + memberImage }}
+                source={{ uri: 'http://192.168.0.35:8080' + memberImage }}
                 style={styles.userImage}
               />
             )}

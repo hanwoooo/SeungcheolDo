@@ -42,14 +42,16 @@ function AuthStackNavigator() {
         name={authNavigations.LOGIN}
         component={LoginScreen}
         options={{ 
-          headerTitle: '로그인 상단바 위치' 
+          headerTitle: '',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name={authNavigations.SIGNUP}
         component={SignupScreen}
         options={{ 
-          headerTitle: '회원가입 상단바 위치'
+          headerTitle: '',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

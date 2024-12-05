@@ -33,10 +33,10 @@ function DrawerButton() {
 const styles = StyleSheet.create({
   drawerButton: {
     position: "absolute",
-    width: 40, // 아이콘 크기와 동일하게 설정
-    height: 60, // 아이콘 크기와 동일하게 설정
-    justifyContent: "center", // 아이콘 중앙 정렬
-    alignItems: "center", // 아이콘 중앙 정렬
+    width: 40,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: colors.WHITE,
   },
 });

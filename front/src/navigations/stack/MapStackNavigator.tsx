@@ -24,6 +24,7 @@ export type MapStackParamList = {
   [mapNavigations.INSIDE_ROUTE]: {
     line: string;
     stationName: string;
+    connectedStation: string;
     insideImage: string;
     stationType: 'departure' | 'transfer' | 'arrival';
   };

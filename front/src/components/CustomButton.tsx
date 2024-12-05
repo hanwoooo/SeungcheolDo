@@ -60,14 +60,14 @@ const styles = StyleSheet.create({
   },
   large: {
     width: '100%',
-    paddingVertical: deviceHeight > 700 ? 15 : 10,
+    paddingVertical: 25,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
   },
   medium: {
     width: '50%',
-    paddingVertical: deviceHeight > 700 ? 12 : 8,
+    paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',

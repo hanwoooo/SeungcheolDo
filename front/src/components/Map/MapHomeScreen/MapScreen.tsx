@@ -44,8 +44,8 @@ function MapScreen({ onStationClick }: MapScreenProps) {
         zoomStep={0.3}
         initialZoom={1}
         bindToBorders={true} // 경계를 활성화
-        contentWidth={1383}   // 이미지의 실제 너비
-        contentHeight={982}   // 이미지의 실제 높이
+        contentWidth={1383}
+        contentHeight={982}
         style={styles.zoomableView}
       >
         <Image

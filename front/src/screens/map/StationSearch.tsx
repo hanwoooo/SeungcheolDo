@@ -10,11 +10,11 @@ import {
 import SearchInput from "@/components/SearchInput";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
-import { mapNavigations } from "@/constants";
+import { colors, mapNavigations } from "@/constants";
 import { MapStackParamList } from "@/navigations/stack/MapStackNavigator";
 import { useAuthContext } from "@/hooks/AuthContext";
-import { isStation } from "@/api/auth"; // 주석 처리
-//import { getMockStationList } from '@/mocks/mockStationData'; // mock 데이터 사용
+import { isStation } from "@/api/auth";
+import { AxiosError } from "axios";
 
 type NavigationProp = StackNavigationProp<MapStackParamList, "StationSearch">;
 type RouteProps = RouteProp<MapStackParamList, "StationSearch">;
@@ -35,7 +35,7 @@ function StationSearch() {
   useEffect(() => {
     fetchFavorites();
   }, []);
-  
+
   const handleClearSearch = () => {
     setKeyword("");
     setIsSearching(false);
@@ -54,11 +54,10 @@ function StationSearch() {
     }
 
     try {
-      const result = await isStation({ stationName: searchTerm }); // 주석 처리
-      //const result = getMockStationList().find(station => station.stationName === searchTerm); // mock 데이터 사용
+      const result = await isStation({ stationName: searchTerm });
       if (selectType && result && index !== undefined) {
         navigation.navigate(mapNavigations.STATION_INFO, { selectType, stationName: result.stationName, index });
-      }else if (selectType && result) {
+      } else if (selectType && result) {
         navigation.navigate(mapNavigations.STATION_INFO, { selectType, stationName: result.stationName });
       } else if (result) {
         navigation.navigate(mapNavigations.MAP_HOME, { stationName: result.stationName });
@@ -66,8 +65,22 @@ function StationSearch() {
         throw new Error("Station not found");
       }
     } catch (error) {
-      console.error("검색 중 오류 발생:", error);
-      Alert.alert("검색 실패", "역 정보를 찾을 수 없습니다.");
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 400) {
+            Alert.alert('잘못된 요청입니다.', '검색 역이 없습니다.');
+          } else {
+            Alert.alert('서버 에러', `오류 코드: ${status}`);
+          }
+        } else {
+          Alert.alert('네트워크 오류', '서버와 연결안됨');
+        }
+      } else {
+        console.error('Error posting route:', error);
+        Alert.alert('알 수 없는 오류', '예상치 못한 오류가 발생');
+      }
     } finally {
       Keyboard.dismiss();
     }
@@ -75,14 +88,15 @@ function StationSearch() {
 
   return (
     <View style={styles.container}>
-      <SearchInput
-        value={keyword}
-        onChangeText={handleChangeKeyword}
-        placeholder="검색할 역을 입력하세요"
-        onSubmit={() => handleSearchSubmit()}
-        onClear={handleClearSearch}
-      />
-
+      <View style={styles.searchInputContainer}>
+        <SearchInput
+          value={keyword}
+          onChangeText={handleChangeKeyword}
+          placeholder="검색할 역을 입력하세요"
+          onSubmit={() => handleSearchSubmit()}
+          onClear={handleClearSearch}
+        />
+      </View>
       <View style={styles.favoriteListContainer}>
         <Text style={styles.favoriteTitle}>즐겨찾기</Text>
         {favorites.map((station) => (
@@ -103,7 +117,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+  },
+  searchInputContainer: {
+    marginTop: 40,
+    margin: 20,
   },
   favoriteListContainer: {
     marginTop: 20,
@@ -112,17 +129,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    backgroundColor: colors.GRAY_200,
+    marginVertical: 10,
+    paddingVertical: 5,
   },
   favoriteItem: {
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 15,
-    marginVertical: 5,
+    marginVertical:10,
+    marginHorizontal: 20,
     borderRadius: 8,
-    backgroundColor: "#f5f5f5",
+    borderWidth: 1,
+    borderColor: colors.GRAY_300,
+    backgroundColor: colors.WHITE,
   },
   favoriteText: {
-    fontSize: 16,
-    color: "#333",
+    fontSize: 20,
+    color: colors.BLACK,
   },
 });
 

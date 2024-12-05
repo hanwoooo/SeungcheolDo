@@ -8,12 +8,13 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 interface InsideStationButtonProps {
   stationName: string;
+  connectedStation: string;
   line: string;
   index: number;
 }
 
 type NavigationProp = StackNavigationProp<MapStackParamList, "StationInfo">;
-function InsideStationButton({ stationName, line, index }: InsideStationButtonProps) {
+function InsideStationButton({ stationName, connectedStation, line, index }: InsideStationButtonProps) {
   const navigation = useNavigation<NavigationProp>();
   const { setInsideImage, setStationType } = useAuthContext();
   const handlePress = async () => {
@@ -28,7 +29,8 @@ function InsideStationButton({ stationName, line, index }: InsideStationButtonPr
     console.log("결과: ", insideImage);
     setInsideImage(insideImage);
     setStationType(stationType);
-    navigation.navigate("InsideRoute", { line, stationName, insideImage, stationType });
+    console.log("연결된 역: ", connectedStation);
+    navigation.navigate("InsideRoute", { line, stationName, connectedStation, insideImage, stationType });
   };
   return (
     <TouchableOpacity style={styles.button} onPress={handlePress}>

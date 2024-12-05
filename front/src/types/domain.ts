@@ -108,6 +108,11 @@ export type InsideStationImageURL = {
 export type InsideStationCoordinates = {
   line: string;
   stationName: string;
+  connectedStation: string;
   exitNum: string;
   stationType: 'departure' | 'transfer' | 'arrival';
+};
+
+export type CoordsData = {
+  coords: string;
 };

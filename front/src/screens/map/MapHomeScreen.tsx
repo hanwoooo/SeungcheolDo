@@ -5,8 +5,7 @@ import SearchButton from '@/components/Map/Button/SearchButton';
 import { useRoute, RouteProp, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { searchStation } from '@/api/auth';
-import { StationData, StationInformation } from '@/types/domain';
-//import { getMockStationData } from '@/mocks/mockStationData';
+import { StationData } from '@/types/domain';
 import { colors, mapNavigations } from '@/constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import StationBottomSheet from '@/components/Map/MapHomeScreen/StationBottomSheet';
@@ -18,7 +17,6 @@ function MapHomeScreen() {
   const route = useRoute<RouteProps>();
   const navigation = useNavigation<NavigationProp>();
 
-  // 초기 파라미터 값으로 stationName 설정
   const [selectedStationName, setSelectedStationName] = useState<string>(
     route.params?.stationName || ''
   );
@@ -34,7 +32,6 @@ function MapHomeScreen() {
     }, [route.params?.stationName])
   );
 
-  // 선택된 역 데이터 가져오기
   useEffect(() => {
     const fetchStationData = async () => {
       if (selectedStationName) {
@@ -53,7 +50,6 @@ function MapHomeScreen() {
     fetchStationData();
   }, [selectedStationName]);
 
-  // 역 선택 시 호출되는 콜백
   const onSelectStation = (type: 'departure' | 'arrival', stationName: string) => {
     console.log(`Selected ${type} station: ${stationName}`);
     navigation.navigate(mapNavigations.STATION_INFO, { selectType: type, stationName });
@@ -61,10 +57,9 @@ function MapHomeScreen() {
 
   const onStationClick = (stationName: string) => {
     console.log(`Clicked station: ${stationName}`);
-    setSelectedStationName(stationName); // 선택된 역 이름 저장
+    setSelectedStationName(stationName);
   };
 
-  // 검색 버튼 클릭 시 호출
   const handleSearchPress = () => {
     navigation.navigate({
       name: mapNavigations.STATION_SEARCH,
@@ -74,17 +69,12 @@ function MapHomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* 검색 버튼 */}
       <View style={styles.searchInputContainer}>
         <SearchButton onPress={handleSearchPress} />
       </View>
-
-      {/* 지도 화면 */}
       <MapScreen 
         onStationClick={onStationClick}
       />
-
-      {/* 선택된 역 정보가 있을 때 BottomSheet 표시 */}
       {stationData && selectedStationName && (
         <StationBottomSheet
           stationName={{ stationName: selectedStationName }}

@@ -130,13 +130,14 @@ function InsideRoute() {
   const [lastMagnitude, setLastMagnitude] = useState<number>(0); // 합성가속도 값 state
   const [angleZ, setAngleZ] = useState<number>(0); // 각도 state
   const route = useRoute<RouteProps>();
-  const {line, stationName, insideImage, stationType} = route.params;
+  const {line, stationName, insideImage, stationType, connectedStation} = route.params;
   // stationInfo 객체 정의
   const stationInfo: InsideStationCoordinates = {
     line,
     stationName,
     stationType,
     exitNum: '',
+    connectedStation,
     // 필요에 따라 추가 필드들 추가
   };
   // 애니메이션 값

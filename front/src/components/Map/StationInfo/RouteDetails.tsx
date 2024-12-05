@@ -30,7 +30,7 @@ function RouteDetails({ route, index, expandedIndexes, toggleAccordion }: RouteD
       <View style={styles.routeContainer}>
         <View style={styles.lineContainer}>
           <Text style={styles.line}>{route.line}호선</Text>
-          <InsideStationButton stationName={route.path[0]} line={route.line} index={index} />
+          <InsideStationButton stationName={route.path[0]} connectedStation={route.path[1]} line={route.line} index={index} />
         </View>
         <View style={styles.pathContainer}>
           <Text style={styles.pathInfo}>{route.path.length}개 역 이동</Text>
@@ -52,7 +52,9 @@ function RouteDetails({ route, index, expandedIndexes, toggleAccordion }: RouteD
           </TouchableOpacity>
         </View>
         {expandedIndexes.includes(index) && (
-          <Text style={styles.path}>{route.path.join(' -> ')}</Text>
+          route.path.map((path, index) => (
+            <Text key={index} style={styles.path}>{path}</Text>
+          ))
         )}
       </View>
     </View>
@@ -116,8 +118,8 @@ const styles = StyleSheet.create({
   path: {
     fontSize: 16,
     color: colors.BLACK,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   pathInfo: {
     fontSize: 16,
