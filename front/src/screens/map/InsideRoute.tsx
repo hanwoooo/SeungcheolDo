@@ -26,7 +26,7 @@ type RouteProps = RouteProp<MapStackParamList, 'InsideRoute'>;
 
 const ZOOM = 1.3; // 사진의 배율
 const STEP_LENGTH = 0.7; // 한 걸음당 이동 거리 (단위: 미터)
-const THRESHOLD = 1.2; // 걸음 감지 임계값 (가속도 합성값 기준)
+const THRESHOLD = 1.1; // 걸음 감지 임계값 (가속도 합성값 기준)
 
 const {width, height} = Dimensions.get('window');
 const mapWidth = 280 * ZOOM;
@@ -130,7 +130,8 @@ function InsideRoute() {
   const [lastMagnitude, setLastMagnitude] = useState<number>(0); // 합성가속도 값 state
   const [angleZ, setAngleZ] = useState<number>(0); // 각도 state
   const route = useRoute<RouteProps>();
-  const {line, stationName, insideImage, stationType, connectedStation} = route.params;
+  const {line, stationName, insideImage, stationType, connectedStation} =
+    route.params;
   // stationInfo 객체 정의
   const stationInfo: InsideStationCoordinates = {
     line,
@@ -152,21 +153,34 @@ function InsideRoute() {
   const calculateFirstangle = (x: number, y: number): number => {
     const changeX = x / ZOOM;
     const changeY = y / ZOOM;
-
-    // 일반 역 내부 지도 초기 좌표 이미지 각도 - 출발
-    if (changeX >= 25 && changeX <= 35) return 90; // 왼쪽 아래 왼쪽 & 왼쪽 위 왼쪽
-    if ((changeX>=48 && changeX<=105) || (changeX>=176 && changeX <=238)){
-      if ((changeY >= 335 && changeY <=342) || (changeY >=340 && changeY <=341)){
-        return 0;
+    // 출발 역
+    if (stationInfo.stationType === 'departure') {
+      if (changeX >= 25 && changeX <= 35) return 90; // 왼쪽 아래 왼쪽 & 왼쪽 위 왼쪽
+      if (
+        (changeX >= 48 && changeX <= 105) ||
+        (changeX >= 176 && changeX <= 238)
+      ) {
+        if (changeY >= 335 && changeY <= 342) {
+          return 0;
+        }
       }
+      if (
+        (changeX >= 68 && changeX <= 69) ||
+        (changeX >= 135 && changeX <= 240)
+      ) {
+        if (changeY >= 25 && changeY <= 35) return 180; //왼쪽 아래 아래 & 오른쪽 아래 아래
+      }
+      if (changeX >= 238 && changeX <= 252) {
+        return -90; // 오른쪽 위쪽 오른쪽 & 오른쪽 아래 오른쪽
+      }
+      if (changeY >= 25 && changeY <= 35) return 180;
+    } else if (stationInfo.stationType === 'transfer') {
+      if (changeX === 40 || changeX === 175) return 90;
+      if (changeX === 99 || changeX === 241) return -90;
+    } else {
+      if (changeX >50 && changeX <110) return 90;
+      if (changeX >= 160 && changeX <220) return -90;
     }
-    if ((changeX >=68 && changeX <=69) || (changeX >=135 && changeX <=240)){ //왼쪽 아래 아래 & 오른쪽 아래 아래
-      if (changeY >= 25 && changeY <=35) return 180;
-    }
-    if (changeX >= 238 && changeX <= 252) {
-      return -90; // 오른쪽 위쪽 오른쪽 & 오른쪽 아래 오른쪽
-    }
-    if (changeY >= 25 && changeY <= 35) return 180;
 
     // 환승 역 내부 지도
 
@@ -204,6 +218,7 @@ function InsideRoute() {
       const initialAngle = calculateFirstangle(x, y);
       rotationZ.setValue(-initialAngle); // 애니메이션 이미지 각도 설정
       setAngleZ(-initialAngle); // 각도 업데이트
+      console.log(initialAngle);
     } catch (error) {
       console.error('경로 요청 중 오류:', error);
     }
@@ -244,10 +259,11 @@ function InsideRoute() {
 
     const accelSubscription = accelerometer.subscribe(
       ({x, y, z}: AccelerometerData) => {
-        const magnitude = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
-
+        const magnitude = Math.sqrt(x ** 2 + y ** 2 + z ** 2) / 10;
         // 걸음 감지 (상승 모멘트만 인식)
         if (magnitude > THRESHOLD && lastMagnitude <= THRESHOLD) {
+          console.log(magnitude, lastMagnitude);
+          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
           const filteredAngle = isNaN(kalman.update(angleZ))
             ? 0
             : kalman.update(angleZ);
@@ -262,6 +278,7 @@ function InsideRoute() {
           };
 
           setCurrentPosition(newPosition);
+          console.log(newPosition);
 
           // 애니메이션 실행
           Animated.spring(positionX, {
@@ -282,10 +299,9 @@ function InsideRoute() {
     const gyroSubscription = gyroscope.subscribe(({z}: GyroscopeData) => {
       const deltaAngleZ = z * 0.1 * (180 / Math.PI); // 100ms 간격 기준
       setAngleZ(prev => prev + deltaAngleZ);
-
-      // 애니메이션 갱신 -- 안에 넣으면 애니메이션이 느려지긴 하는데 빼면 각도 조정이 안됨;;
-      rotationZ.setValue(-kalman.update(angleZ));
     });
+    // 애니메이션 갱신 -- 안에 넣으면 애니메이션이 느려지긴 하는데 빼면 각도 조정이 안됨;;
+    rotationZ.setValue(-kalman.update(angleZ));
 
     return () => {
       accelSubscription.unsubscribe();
@@ -293,7 +309,7 @@ function InsideRoute() {
     };
   }, [angleZ, lastMagnitude, currentPosition]);
 
-  const fullImagePath = `http://192.168.0.35:8080${insideImage}`;
+  const fullImagePath = `http://192.168.0.5:8080${insideImage}`;
 
   return (
     <View style={styles.container}>
