@@ -26,7 +26,7 @@ type RouteProps = RouteProp<MapStackParamList, 'InsideRoute'>;
 
 const ZOOM = 1.3; // 사진의 배율
 const STEP_LENGTH = 0.7; // 한 걸음당 이동 거리 (단위: 미터)
-const THRESHOLD = 1.1; // 걸음 감지 임계값 (가속도 합성값 기준)
+const THRESHOLD = 1.0; // 걸음 감지 임계값 (가속도 합성값 기준)
 
 const {width, height} = Dimensions.get('window');
 const mapWidth = 280 * ZOOM;
@@ -297,11 +297,11 @@ function InsideRoute() {
     );
 
     const gyroSubscription = gyroscope.subscribe(({z}: GyroscopeData) => {
-      const deltaAngleZ = z * 0.1 * (180 / Math.PI); // 100ms 간격 기준
+      const deltaAngleZ = z * 0.15 * (180 / Math.PI); // 100ms 간격 기준
       setAngleZ(prev => prev + deltaAngleZ);
+      // 애니메이션 갱신 -- 안에 넣으면 애니메이션이 느려지긴 하는데 빼면 각도 조정이 안됨;;
+      rotationZ.setValue(-kalman.update(angleZ));
     });
-    // 애니메이션 갱신 -- 안에 넣으면 애니메이션이 느려지긴 하는데 빼면 각도 조정이 안됨;;
-    rotationZ.setValue(-kalman.update(angleZ));
 
     return () => {
       accelSubscription.unsubscribe();
@@ -394,12 +394,77 @@ function InsideRoute() {
   );
 }
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     padding: 20,
+//   },
+//   goBackButton: {
+//     position: 'absolute',
+//     top: 10,
+//     left: 10,
+//   },
+//   text: {
+//     fontSize: 18,
+//     margin: 10,
+//   },
+//   imageContainer: {
+//     width: width,
+//     height: height / 2,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   map: {
+//     width: mapWidth, // 지도의 크기
+//     height: mapHeight,
+//     position: 'absolute',
+//   },
+//   image: {
+//     width: 20,
+//     height: 37,
+//     position: 'absolute',
+//   },
+//   buttonContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-around',
+//     width: '100%',
+//     marginVertical: 10,
+//     marginBottom: 60,
+//   },
+//   circleButton: {
+//     width: 50,
+//     height: 50,
+//     borderRadius: 25,
+//     backgroundColor: '#FFFFFF',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     marginHorizontal: 10,
+//     borderWidth: 2, // 검은색 테두리
+//     borderColor: '#000000',
+//   },
+//   activeButton: {
+//     backgroundColor: '#0365C7', // 활성화 시 파란색 배경
+//   },
+//   buttonText: {
+//     color: '#000000',
+//     fontWeight: 'bold',
+//     fontSize: 16,
+//   },
+//   activeButtonText: {
+//     color: '#FFFFFF', // 활성화 시 흰색 텍스트
+//   },
+// });
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center', // 이미지를 화면 중앙에 배치
+    alignItems: 'center',     // 이미지를 화면 중앙에 배치
   },
   goBackButton: {
     position: 'absolute',
@@ -408,13 +473,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    margin: 10,
-  },
-  imageContainer: {
-    width: width,
-    height: height / 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 80,
+    textAlign:'center'
   },
   map: {
     width: mapWidth, // 지도의 크기
@@ -431,7 +491,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     marginVertical: 10,
-    marginBottom: 60,
+    marginTop: 50,
+    marginBottom: -80
   },
   circleButton: {
     width: 50,
