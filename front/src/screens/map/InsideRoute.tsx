@@ -394,68 +394,6 @@ function InsideRoute() {
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: 20,
-//   },
-//   goBackButton: {
-//     position: 'absolute',
-//     top: 10,
-//     left: 10,
-//   },
-//   text: {
-//     fontSize: 18,
-//     margin: 10,
-//   },
-//   imageContainer: {
-//     width: width,
-//     height: height / 2,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   map: {
-//     width: mapWidth, // 지도의 크기
-//     height: mapHeight,
-//     position: 'absolute',
-//   },
-//   image: {
-//     width: 20,
-//     height: 37,
-//     position: 'absolute',
-//   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//     width: '100%',
-//     marginVertical: 10,
-//     marginBottom: 60,
-//   },
-//   circleButton: {
-//     width: 50,
-//     height: 50,
-//     borderRadius: 25,
-//     backgroundColor: '#FFFFFF',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     marginHorizontal: 10,
-//     borderWidth: 2, // 검은색 테두리
-//     borderColor: '#000000',
-//   },
-//   activeButton: {
-//     backgroundColor: '#0365C7', // 활성화 시 파란색 배경
-//   },
-//   buttonText: {
-//     color: '#000000',
-//     fontWeight: 'bold',
-//     fontSize: 16,
-//   },
-//   activeButtonText: {
-//     color: '#FFFFFF', // 활성화 시 흰색 텍스트
-//   },
-// });
 const styles = StyleSheet.create({
   container: {
     flex: 1,
