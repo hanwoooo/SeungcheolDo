@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Animated,
-  Dimensions,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -17,7 +16,6 @@ import {
 } from 'react-native-sensors';
 import {postCoordsData} from '@/api/auth';
 import {InsideStationCoordinates} from '@/types/domain';
-import {useAuthContext} from '@/hooks/AuthContext';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import GoBackButton from '@/components/Map/Button/goBackButton';
@@ -28,7 +26,6 @@ const ZOOM = 1.3; // 사진의 배율
 const STEP_LENGTH = 0.7; // 한 걸음당 이동 거리 (단위: 미터)
 const THRESHOLD = 1.0; // 걸음 감지 임계값 (가속도 합성값 기준)
 
-const {width, height} = Dimensions.get('window');
 const mapWidth = 280 * ZOOM;
 const mapHeight = 370 * ZOOM;
 
@@ -44,8 +41,6 @@ interface AccelerometerData {
 }
 
 interface GyroscopeData {
-  x: number;
-  y: number;
   z: number;
 }
 
@@ -151,8 +146,9 @@ function InsideRoute() {
 
   // 초기위치 각도지정 함수
   const calculateFirstangle = (x: number, y: number): number => {
-    const changeX = x / ZOOM;
-    const changeY = y / ZOOM;
+    const changeX = Math.round(x / ZOOM);
+    const changeY = Math.round(y / ZOOM);
+    console.log(changeX, changeY);
     // 출발 역
     if (stationInfo.stationType === 'departure') {
       if (changeX >= 25 && changeX <= 35) return 90; // 왼쪽 아래 왼쪽 & 왼쪽 위 왼쪽
@@ -247,6 +243,7 @@ function InsideRoute() {
       const initialAngle = calculateFirstangle(x, y);
       rotationZ.setValue(-initialAngle); // 애니메이션 이미지 각도 설정
       setAngleZ(-initialAngle); // 각도 업데이트
+      console.log(initialAngle);
     } catch (error) {
       console.error('경로 요청 중 오류:', error);
     }
