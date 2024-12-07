@@ -24,7 +24,7 @@ type RouteProps = RouteProp<MapStackParamList, 'InsideRoute'>;
 
 const ZOOM = 1.3; // 사진의 배율
 const STEP_LENGTH = 0.7; // 한 걸음당 이동 거리 (단위: 미터)
-const THRESHOLD = 1.0; // 걸음 감지 임계값 (가속도 합성값 기준)
+const THRESHOLD = 1.15; // 걸음 감지 임계값 (가속도 합성값 기준)
 
 const mapWidth = 280 * ZOOM;
 const mapHeight = 370 * ZOOM;
@@ -134,7 +134,6 @@ function InsideRoute() {
     stationType,
     exitNum: '',
     connectedStation,
-    // 필요에 따라 추가 필드들 추가
   };
   // 애니메이션 값
   const positionX = useRef<Animated.Value>(new Animated.Value(0)).current;
@@ -174,24 +173,25 @@ function InsideRoute() {
       if (changeX === 40 || changeX === 175) return 90;
       if (changeX === 99 || changeX === 241) return -90;
     } else {
-      if (changeX >50 && changeX <110) return 90;
-      if (changeX >= 160 && changeX <220) return -90;
+      if (changeX > 50 && changeX < 110) return 90;
+      if (changeX >= 160 && changeX < 220) return -90;
     }
-
-    // 환승 역 내부 지도
-
     return 0; // 기본값
   };
 
   // 버튼 선택 시 작동 함수
   const routeButtonPress = async (index: number) => {
-    setActivePath(index); // 버튼 변경을 위함.
+    let updatedStationData = stationInfo;
+    if (index !== 99) {// 99는 환승역
+      setActivePath(index); // 버튼 변경을 위함.
 
-    // exitNum을 업데이트한 stationData 생성
-    const updatedStationData = {
-      ...stationInfo,
-      exitNum: (index + 1).toString(),
-    }; // 여기서 index 별로 exitNum 변경
+      // exitNum을 업데이트한 stationData 생성
+      updatedStationData = {
+        ...stationInfo,
+        exitNum: (index + 1).toString(),
+      }; // 여기서 index 별로 exitNum 변경
+    }
+
     try {
       const selectedPath = await coordsData(updatedStationData);
       if (selectedPath.length > 0) {
@@ -200,35 +200,6 @@ function InsideRoute() {
 
       const {x, y} = selectedPath[0];
       // 지도 내부 좌표계를 기준으로 초기 위치 계산
-      const offsetX = x - mapWidth / 2;
-      const offsetY = y - mapHeight / 2;
-
-      // currentPosition 상태 업데이트
-      setCurrentPosition({x: offsetY, y: offsetX});
-
-      // 애니메이션 이미지의 위치 설정
-      positionX.setValue(offsetY); // Y축은 상하
-      positionY.setValue(offsetX); // X축은 좌우
-
-      // x 좌표에 따른 초기 회전 각도 설정
-      const initialAngle = calculateFirstangle(x, y);
-      rotationZ.setValue(-initialAngle); // 애니메이션 이미지 각도 설정
-      setAngleZ(-initialAngle); // 각도 업데이트
-      console.log(initialAngle);
-    } catch (error) {
-      console.error('경로 요청 중 오류:', error);
-    }
-  };
-  // 버튼 선택 시 작동 함수
-  const handleButtonPress = async () => {
-    try {
-      const selectedPath = await coordsData(stationInfo); // 이걸 서버에서 받아온 경로로 사용
-      if (selectedPath.length > 0 && selectedPath[0]) {
-        setCurrentCoordinates(selectedPath);
-        // 지도 내부 좌표계를 기준으로 초기 위치 계산
-      }
-      const {x, y} = selectedPath[0];
-
       const offsetX = x - mapWidth / 2;
       const offsetY = y - mapHeight / 2;
 
@@ -260,7 +231,6 @@ function InsideRoute() {
         // 걸음 감지 (상승 모멘트만 인식)
         if (magnitude > THRESHOLD && lastMagnitude <= THRESHOLD) {
           console.log(magnitude, lastMagnitude);
-          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
           const filteredAngle = isNaN(kalman.update(angleZ))
             ? 0
             : kalman.update(angleZ);
@@ -288,7 +258,6 @@ function InsideRoute() {
             useNativeDriver: true,
           }).start();
         }
-
         setLastMagnitude(magnitude);
       },
     );
@@ -318,7 +287,7 @@ function InsideRoute() {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.circleButton]}
-              onPress={() => handleButtonPress()}>
+              onPress={() => routeButtonPress(99)}>
               <Text style={styles.buttonText}>경로 확인</Text>
             </TouchableOpacity>
           </View>
@@ -349,12 +318,6 @@ function InsideRoute() {
       )}
 
       <View style={styles.imageContainer}>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
         {insideImage && (
           <Image source={{uri: fullImagePath}} style={[styles.map]} />
         )}
@@ -399,7 +362,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     justifyContent: 'center', // 이미지를 화면 중앙에 배치
-    alignItems: 'center',     // 이미지를 화면 중앙에 배치
+    alignItems: 'center', // 이미지를 화면 중앙에 배치
   },
   goBackButton: {
     position: 'absolute',
@@ -409,7 +372,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     marginTop: 80,
-    textAlign:'center'
+    textAlign: 'center',
   },
   map: {
     width: mapWidth, // 지도의 크기
@@ -427,7 +390,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
     marginTop: 50,
-    marginBottom: -80
+    marginBottom: -80,
   },
   circleButton: {
     width: 50,
