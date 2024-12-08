@@ -20,7 +20,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           <View style={styles.userImageContainer}>
             {!memberImage &&  // 기존에는 imageUri === null 이였음
               <Image
-                source={require('@/assets/user-default.png')}
+                source={require('@/assets/사용자_프로필.png')}
                 style={styles.userImage}
               />}
             {memberImage !== null && (
