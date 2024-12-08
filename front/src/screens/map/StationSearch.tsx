@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import SearchInput from "@/components/SearchInput";
+
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { colors, mapNavigations } from "@/constants";
@@ -15,6 +15,7 @@ import { MapStackParamList } from "@/navigations/stack/MapStackNavigator";
 import { useAuthContext } from "@/hooks/AuthContext";
 import { isStation } from "@/api/auth";
 import { AxiosError } from "axios";
+import SearchInput from "@/components/Map/StationSearch/SearchInput";
 
 type NavigationProp = StackNavigationProp<MapStackParamList, "StationSearch">;
 type RouteProps = RouteProp<MapStackParamList, "StationSearch">;

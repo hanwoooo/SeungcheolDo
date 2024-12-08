@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class FavoriteService {
@@ -33,12 +33,12 @@ public class FavoriteService {
     }
 
     public void addFavorite(Long memberId, Long stationId) {
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("Member not found"));
-        StationEntity station = stationRepository.findById(stationId).orElseThrow(() -> new NoSuchElementException("Station not found"));
+        Optional<MemberEntity> member = memberRepository.findById(memberId);
+        Optional<StationEntity> station = stationRepository.findById(stationId);
 
         FavoriteEntity favorite = new FavoriteEntity();
-        favorite.setMember(member);
-        favorite.setStation(station);
+        favorite.setMember(member.get());
+        favorite.setStation(station.get());
         favoriteRepository.save(favorite);
     }
 
@@ -47,7 +47,7 @@ public class FavoriteService {
         favoriteRepository.deleteByMemberIdAndStationId(memberId, stationId);
     }
 
-    @Transactional // 해당 메서드의 모든 작업이 하나의 트랜잭션 내에서 수행되도록 설정
+    @Transactional
     public List<StationDto> getFavorites(MemberEntity member) {
 
 

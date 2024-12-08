@@ -3,7 +3,8 @@ import {StyleSheet, TextInput, TextInputProps, TouchableOpacity, View} from 'rea
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {colors} from '@/constants';
-import GoBackButton from './Map/Button/goBackButton';
+import GoBackButton from '../Button/goBackButton';
+
 
 interface SearchInputProps extends TextInputProps {
   onSubmit: () => void;

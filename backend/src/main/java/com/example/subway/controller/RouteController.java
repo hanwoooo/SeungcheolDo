@@ -1,6 +1,6 @@
 package com.example.subway.controller;
 
-import com.example.subway.dto.DijkstraResult;
+import com.example.subway.dto.RouteResultDto;
 import com.example.subway.dto.RouteDto;
 import com.example.subway.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ public class RouteController {
 
     // 경로 탐색
     @PostMapping("/routes")
-    public ResponseEntity<DijkstraResult> getRoute(@RequestBody RouteDto routeDto) {
+    public ResponseEntity<RouteResultDto> getRoute(@RequestBody RouteDto routeDto) {
         try {
             // 경유지 없는 경우
             if (routeDto.getWaypoints().isEmpty()) {
-                DijkstraResult routeResult = routeService.findRoute(
+                RouteResultDto routeResult = routeService.findRoute(
                         routeDto.getDepartureStation(),
                         routeDto.getArrivalStation(),
                         routeDto.getOption()
@@ -33,7 +33,7 @@ public class RouteController {
                 return ResponseEntity.ok(routeResult);
             // 경유지 있는 경우
             } else {
-                DijkstraResult routeResult = routeService.findRoute(
+                RouteResultDto routeResult = routeService.findRouteWithWaypoints(
                         routeDto.getDepartureStation(),
                         routeDto.getArrivalStation(),
                         routeDto.getWaypoints(),
@@ -42,7 +42,6 @@ public class RouteController {
                 return ResponseEntity.ok(routeResult);
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }

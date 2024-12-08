@@ -17,5 +17,5 @@ public class StationDirectionEntity {
     private LineStationEntity lineStation;
 
     @Column
-    private String direction;
+    private String direction; // Left or Right
 }

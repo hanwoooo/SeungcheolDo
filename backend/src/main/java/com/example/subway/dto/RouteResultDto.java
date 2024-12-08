@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DijkstraResult {
+public class RouteResultDto {
     @Data
     @AllArgsConstructor
     public static class RouteResult {

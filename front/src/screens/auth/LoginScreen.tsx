@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
-import { Image, SafeAreaView, StyleSheet, TextInput, View } from "react-native";
-import InputField from "@/components/InputField";
-import CustomButton from "@/components/CustomButton";
+import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import InputField from "@/components/public/InputField";
+import CustomButton from "@/components/public/CustomButton";
 import useForm from "@/hooks/useForm";
 import { validateLogin } from "@/utils";
 import useAuth from "@/hooks/useAuth";
@@ -20,6 +20,11 @@ function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.keyboardAvoidingView}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
       <View style={styles.inputContainer}>
         <Image source={require('@/assets/크레파스로고.png')} style={styles.logo} />
         <InputField
@@ -50,7 +55,8 @@ function LoginScreen() {
         variant="filled"
         size="large"
         onPress={handleSubmit}
-      />
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -60,6 +66,9 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 30,
     marginTop: 200,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
   inputContainer: {
     gap: 20,

@@ -9,7 +9,7 @@ import lombok.Data;
 public class TransferStationCoordinateEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 증가하는 기본 키
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

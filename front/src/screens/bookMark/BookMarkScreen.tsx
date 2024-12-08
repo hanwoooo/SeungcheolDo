@@ -7,9 +7,10 @@ import {
   getFavorite,
   isStation,
 } from "@/api/auth";
-import SearchInput from "@/components/SearchInput";
 import StationItem from "@/components/BookMark/StationItem";
 import { StationInformation, Stationlist } from "@/types/domain";
+import SearchInput from "@/components/Map/StationSearch/SearchInput";
+import { colors } from "@/constants";
 
 function BookMarkScreen() {
   const [stationList, setStationList] = useState<Stationlist>([]);
@@ -23,7 +24,7 @@ function BookMarkScreen() {
       const data = await getStationList();
       setStationList(data);
     } catch (error) {
-      Alert.alert("Error", "Failed to fetch station list.");
+      Alert.alert("리스트 에러", "역 리스트 불러오는 것에 실패했습니다.");
     }
   };
 
@@ -33,7 +34,7 @@ function BookMarkScreen() {
       setFavorites(data);
       fetchStations();
     } catch (error) {
-      Alert.alert("Error", "Failed to fetch favorites.");
+      Alert.alert("리스트 에러", "즐겨찾기 불러오는 것에 실패했습니다.");
     }
   };
 
@@ -44,7 +45,7 @@ function BookMarkScreen() {
       const data = await isStation({ stationName: searchText });
       setSearchResult(data);
     } catch (error) {
-      Alert.alert("Error", "No matching stations found.");
+      Alert.alert("역 없음", "맞는 역을 찾을 수 없습니다.");
     }
   };
 
@@ -59,7 +60,7 @@ function BookMarkScreen() {
       const result = await addFavorite({ stationName: stationName });
       fetchFavorites();
     } catch (error) {
-      Alert.alert("Error", "Station already in favorites.");
+      Alert.alert("즐겨찾기 에러", "이미 즐겨찾기에 있는 역입니다.");
     }
   };
 
@@ -68,7 +69,7 @@ function BookMarkScreen() {
       const result = await delFavorite({ stationName: stationName });
       fetchFavorites();
     } catch (error) {
-      Alert.alert("Error", "Station not found in favorites.");
+      Alert.alert("즐겨찾기 에러", "즐겨찾기에 없는 역입니다.");
     }
   };
 
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: colors.WHITE,
   },
   sectionTitle: {
     fontSize: 18,

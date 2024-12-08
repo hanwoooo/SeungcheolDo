@@ -35,7 +35,7 @@ public class StationController {
         }
     }
 
-    // 역 검색 자세히 ( 노선 별 연결된 역 )
+    // 역 검색 자세히 (노선 별 연결된 역 정보)
     @PostMapping("/stations/detail")
     public ResponseEntity<StationDetailDto> findStationDetailByName(@RequestParam String stationName) {
         StationDetailDto station = stationService.findStationDetailByName(stationName);

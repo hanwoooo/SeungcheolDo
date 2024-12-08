@@ -1,26 +1,12 @@
 package com.example.subway.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.example.subway.dto.RouteInfoDto;
+import com.example.subway.dto.StationDetailDto;
+import com.example.subway.entity.*;
+import com.example.subway.repository.*;
 import org.springframework.stereotype.Service;
 
-import com.example.subway.dto.RouteInfoDto;
-import com.example.subway.entity.LineEntity;
-import com.example.subway.entity.LineStationEntity;
-import com.example.subway.entity.RouteEntity;
-import com.example.subway.entity.StationDirectionEntity;
-import com.example.subway.entity.StationEntity;
-import com.example.subway.entity.StationExitEntity;
-import com.example.subway.repository.LineRepository;
-import com.example.subway.repository.LineStationRepository;
-import com.example.subway.repository.RouteRepository;
-import com.example.subway.repository.StationDirectionRepository;
-import com.example.subway.repository.StationExitCoordinateRepository;
-import com.example.subway.repository.StationExitRepository;
-import com.example.subway.repository.StationRepository;
-import com.example.subway.repository.TransferStationCoordinateRepository;
-import com.example.subway.repository.TransferStationRepository;
+import java.util.*;
 
 @Service
 public class RouteInfoService {
@@ -51,51 +37,25 @@ public class RouteInfoService {
 
     // 내부길찾기 좌표 반환
     public String getCoordinates(RouteInfoDto routeInfoDto) {
-        String connectedStation = "";
-
 
         Optional<StationEntity> station = stationRepository.findByStationName(routeInfoDto.getStationName());
         Optional<LineEntity> line = lineRepository.findByLineName(String.valueOf(routeInfoDto.getLine()));
         Optional<LineStationEntity> lineStation = lineStationRepository.findByLineAndStation(line.get(), station.get());
 
-        // 출발, 환승 상황일 때
-        Long stationId = station.get().getId();
-
-        // 해당 역과 연결된 모든 경로를 조회
-        List<RouteEntity> connectedRoutes = routeRepository.findConnectedRoutesByStationIdAndLine(stationId, routeInfoDto.getLine());
-
-        // 연결된 각 경로에 대해 반복 처리
-        for (RouteEntity route : connectedRoutes) {
-            Long arrivalStationId = route.getArrivalStation().getId();
-            Long departureStationId = route.getDepartureStation().getId();
-            if (routeInfoDto.getStationType().equals("departure") || routeInfoDto.getStationType().equals("transfer")) {
-                // 출발 역이 현재 역인 경우.
-                if (stationId.equals(departureStationId)) {
-                    connectedStation = stationRepository.findById(arrivalStationId).get().getStationName();
-                }
-            } else if (routeInfoDto.getStationType().equals("arrival")) {
-                if (stationId.equals(arrivalStationId)) {
-
-                    connectedStation = stationRepository.findById(departureStationId).get().getStationName();
-
-                }
-            }
-        }
         String direction = getStationDirection(
                 routeInfoDto.getStationName(),
-                connectedStation,
+                routeInfoDto.getConnectedStation(),
                 routeInfoDto.getLine()
         );
         Optional<StationDirectionEntity> stationDirection = stationDirectionRepository.findByLineStationAndDirection(lineStation.get(), direction);
 
-        if (routeInfoDto.getStationType().equals("departure") || routeInfoDto.getStationType().equals("arrival")) {
-            Optional<StationExitEntity> stationExit = stationExitRepository.findByStationDirectionAndExitNumber(stationDirection.get(), routeInfoDto.getExitNum());
-            Optional<String> coordinates = stationExitCoordinateRepository.findCoordinatesByStationExit(stationExit.get());
+        if (routeInfoDto.getStationType().equals("transfer")) {
+            Optional<String> coordinates = transferStationCoordinateRepository.findCoordinatesByStationExit(stationDirection.get());
             return coordinates.get();
         }
-        // 환승 상황일 때
         else {
-            Optional<String> coordinates = transferStationCoordinateRepository.findCoordinatesByStationExit(stationDirection.get());
+            Optional<StationExitEntity> stationExit = stationExitRepository.findByStationDirectionAndExitNumber(stationDirection.get(), routeInfoDto.getExitNum());
+            Optional<String> coordinates = stationExitCoordinateRepository.findCoordinatesByStationExit(stationExit.get());
             return coordinates.get();
         }
     }
@@ -120,8 +80,8 @@ public class RouteInfoService {
         System.out.println(routeInfoDto);
         Optional<StationEntity> station = stationRepository.findByStationName(routeInfoDto.getStationName());
         Optional<LineEntity> line = lineRepository.findByLineName(routeInfoDto.getLine());
-        Optional<LineStationEntity> lineStation = lineStationRepository.findByLineAndStation(line.get(), station.get());
         if (routeInfoDto.getStationType().equals("transfer")) {
+            Optional<LineStationEntity> lineStation = lineStationRepository.findByLineAndStation(line.get(), station.get());
             return transferStationRepository.findImagePathByLineStation(lineStation.get());
         } else {
             return lineStationRepository.findImagePathByLineAndStation(line.get(), station.get());

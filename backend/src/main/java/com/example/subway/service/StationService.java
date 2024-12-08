@@ -109,7 +109,7 @@ public class StationService {
                 if (stationId.equals(arrivalStationId)) {
                     String direction = "previous"; // 도착역
                     // 예외
-                    if (stationId == 1) {
+                    if (stationId == 1 && line.equals("1") || stationId == 73 && line.equals("6")) {
                         direction = "next";
                     }
                     String endStation = getEndStation(stationId, departureStationId, line); // 방면 계산
@@ -125,7 +125,7 @@ public class StationService {
                 if (stationId.equals(departureStationId)) {
                     String direction = "next"; //
                     // 예외
-                    if (stationId == 1) {
+                    if (stationId == 1 && line.equals("1") || stationId == 73 && line.equals("6"))  {
                         direction = "previous";
                     }
                     String endStation = getEndStation(stationId, arrivalStationId, line); // 방면 계산
@@ -174,7 +174,8 @@ public class StationService {
                 }
                 break;
             case "3":
-                if ((stationId == 48 && connectedStationId == 7) || (stationId == 7 && connectedStationId == 48)) {
+                if ((stationId == 48 && connectedStationId == 7) || (stationId == 7 && connectedStationId == 48)
+                        || (stationId == 44 && connectedStationId == 23) || (stationId == 23 && connectedStationId == 44) ) {
                     return stationId < connectedStationId ? "207방면" : "107방면";
                 }
                 if (stationId > connectedStationId) {
@@ -208,7 +209,7 @@ public class StationService {
                 }
                 break;
             case "6":
-                if ((stationId == 74 && connectedStationId == 12) || (stationId == 12 && connectedStationId == 74)
+                if ((stationId == 74 && connectedStationId == 21) || (stationId == 21 && connectedStationId == 74)
                         || (stationId == 78 && connectedStationId == 16) || (stationId == 16 && connectedStationId == 78)
                         || (stationId == 81 && connectedStationId == 60) || (stationId == 60 && connectedStationId == 81)
                         || (stationId == 88 && connectedStationId == 65) || (stationId == 65 && connectedStationId == 88)

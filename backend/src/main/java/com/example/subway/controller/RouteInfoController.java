@@ -19,16 +19,16 @@ public class RouteInfoController {
         this.routeInfoService = routeInfoService;
     }
 
-    // 역 내 좌표 반환
+    // 역 내 지도 좌표 반환
     @PostMapping("/route-info/coordinates")
     public ResponseEntity<String> getCoordinates(@RequestBody RouteInfoDto routeInfoDto) {
         return ResponseEntity.ok(routeInfoService.getCoordinates(routeInfoDto));
     }
 
+
     // 역 내부 지도 경로 반환
     @PostMapping("/route-info/image-path")
     public ResponseEntity<String> getStationMapImagePath(@RequestBody RouteInfoDto routeInfoDto) {
-        System.out.println(routeInfoDto);
         return ResponseEntity.ok(routeInfoService.getStationMapImagePath(routeInfoDto));
     }
 }

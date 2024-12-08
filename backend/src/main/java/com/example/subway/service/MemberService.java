@@ -18,7 +18,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-//     회원가입
+    // 회원가입
     public boolean signUp(SignUpDto signUpDto) {
         // 중복 아이디 확인
         if (memberRepository.findByMemberEmail(signUpDto.getMemberEmail()).isPresent()) {
@@ -35,10 +35,6 @@ public class MemberService {
 
     // 로그인
     public boolean login(LoginDto loginDTO) {
-        /*
-            1. 사용자가 입력한 이메일이 DB에 있는지 조회
-            2. 있다면 비밀번호가 일치하는지 판단
-         */
         Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(loginDTO.getMemberEmail());
         if (byMemberEmail.isPresent()) {
             // 조회 결과가 있다.
