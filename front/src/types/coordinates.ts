@@ -1,10 +1,8 @@
-// 역 좌표 데이터 타입 정의
 export interface StationPoint {
   id: string;
   coords: [number, number];
 }
 
-// 좌표 데이터
 export const stations: StationPoint[] = [
   { id: "101", coords: [53, 494] },
   { id: "102", coords: [52, 582] },

@@ -78,21 +78,21 @@ export type Route = {
 };
 
 export type RouteResult = {
-  line: string; // 노선 번호
-  path: string[]; // 경로 (역 ID 배열)
-  timeValue: number; // 시간 값 (분 단위)
+  line: string;
+  path: string[];
+  timeValue: number;
 };
 
 export type ValueResults = {
-  time: number; // 총 소요 시간 (분 단위)
-  distance: number; // 거리 (미터 단위)
-  cost: number; // 비용 (원 단위)
-  transfer: number; // 환승 횟수
+  time: number;
+  distance: number;
+  cost: number;
+  transfer: number;
 };
 
 export type DijkstraResult = {
-  routeResults: RouteResult[]; // 경로 결과 배열
-  valueResults: ValueResults; // 부가 정보
+  routeResults: RouteResult[];
+  valueResults: ValueResults;
 };
 
 export type InsideStationPath = {

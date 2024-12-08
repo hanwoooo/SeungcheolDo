@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     color: colors.BLACK,
   },
   clearButton: {
-    marginLeft: 10, // 텍스트 입력 필드와의 간격
+    marginLeft: 10,
   },
 });
 

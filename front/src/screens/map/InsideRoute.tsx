@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,24 +7,24 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import Svg, {Polyline} from 'react-native-svg';
+import Svg, { Polyline } from 'react-native-svg';
 import {
   accelerometer,
   gyroscope,
   setUpdateIntervalForType,
   SensorTypes,
 } from 'react-native-sensors';
-import {postCoordsData} from '@/api/auth';
-import {InsideStationCoordinates} from '@/types/domain';
-import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import { postCoordsData } from '@/api/auth';
+import { InsideStationCoordinates } from '@/types/domain';
+import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import GoBackButton from '@/components/Map/Button/goBackButton';
 
 type RouteProps = RouteProp<MapStackParamList, 'InsideRoute'>;
 
 const ZOOM = 1.3; // 사진의 배율
 const STEP_LENGTH = 0.7; // 한 걸음당 이동 거리 (단위: 미터)
-const THRESHOLD = 1.15; // 걸음 감지 임계값 (가속도 합성값 기준)
+const THRESHOLD = 1.0; // 걸음 감지 임계값 (가속도 합성값 기준)
 
 const mapWidth = 280 * ZOOM;
 const mapHeight = 370 * ZOOM;
@@ -90,14 +90,14 @@ const coordsData = async (stationInfo: InsideStationCoordinates) => {
     // 서버 응답 데이터 확인
     console.log('서버 응답 데이터:', response, typeof response);
 
-    const result: {x: number; y: number}[] = [];
+    const result: { x: number; y: number }[] = [];
     // 응답 데이터를 '/'로 분리
     const array = response.split('/');
     array.forEach(coords => {
       if (coords.trim()) {
         const xy = coords.split(',').map(val => parseFloat(val.trim()));
         if (xy.length === 2 && !isNaN(xy[0]) && !isNaN(xy[1])) {
-          result.push({x: xy[0] * ZOOM, y: xy[1] * ZOOM});
+          result.push({ x: xy[0] * ZOOM, y: xy[1] * ZOOM });
         } else {
           console.warn('유효하지 않은 좌표:', coords);
         }
@@ -115,7 +115,7 @@ const coordsData = async (stationInfo: InsideStationCoordinates) => {
 
 function InsideRoute() {
   const [currentCoordinates, setCurrentCoordinates] = useState<
-    {x: number; y: number}[]
+    { x: number; y: number }[]
   >([]); // 선택된 경로 좌표 state -- 서버에서 받으면 변경
   const [activePath, setActivePath] = useState<number | null>(null); // 활성화된 경로 state
   const [currentPosition, setCurrentPosition] = useState<Position>({
@@ -125,7 +125,7 @@ function InsideRoute() {
   const [lastMagnitude, setLastMagnitude] = useState<number>(0); // 합성가속도 값 state
   const [angleZ, setAngleZ] = useState<number>(0); // 각도 state
   const route = useRoute<RouteProps>();
-  const {line, stationName, insideImage, stationType, connectedStation} =
+  const { line, stationName, insideImage, stationType, connectedStation } =
     route.params;
   // stationInfo 객체 정의
   const stationInfo: InsideStationCoordinates = {
@@ -182,9 +182,8 @@ function InsideRoute() {
   // 버튼 선택 시 작동 함수
   const routeButtonPress = async (index: number) => {
     let updatedStationData = stationInfo;
-    if (index !== 99) {// 99는 환승역
+    if (index !== 99) { // 99는 환승역
       setActivePath(index); // 버튼 변경을 위함.
-
       // exitNum을 업데이트한 stationData 생성
       updatedStationData = {
         ...stationInfo,
@@ -198,13 +197,13 @@ function InsideRoute() {
         setCurrentCoordinates(selectedPath);
       }
 
-      const {x, y} = selectedPath[0];
+      const { x, y } = selectedPath[0];
       // 지도 내부 좌표계를 기준으로 초기 위치 계산
       const offsetX = x - mapWidth / 2;
       const offsetY = y - mapHeight / 2;
 
       // currentPosition 상태 업데이트
-      setCurrentPosition({x: offsetY, y: offsetX});
+      setCurrentPosition({ x: offsetY, y: offsetX });
 
       // 애니메이션 이미지의 위치 설정
       positionX.setValue(offsetY); // Y축은 상하
@@ -226,11 +225,12 @@ function InsideRoute() {
     setUpdateIntervalForType(SensorTypes.gyroscope, 100); // 자이로스코프 업데이트 간격 설정
 
     const accelSubscription = accelerometer.subscribe(
-      ({x, y, z}: AccelerometerData) => {
+      ({ x, y, z }: AccelerometerData) => {
         const magnitude = Math.sqrt(x ** 2 + y ** 2 + z ** 2) / 10;
         // 걸음 감지 (상승 모멘트만 인식)
         if (magnitude > THRESHOLD && lastMagnitude <= THRESHOLD) {
           console.log(magnitude, lastMagnitude);
+          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
           const filteredAngle = isNaN(kalman.update(angleZ))
             ? 0
             : kalman.update(angleZ);
@@ -258,11 +258,12 @@ function InsideRoute() {
             useNativeDriver: true,
           }).start();
         }
+
         setLastMagnitude(magnitude);
       },
     );
 
-    const gyroSubscription = gyroscope.subscribe(({z}: GyroscopeData) => {
+    const gyroSubscription = gyroscope.subscribe(({ z }: GyroscopeData) => {
       const deltaAngleZ = z * 0.15 * (180 / Math.PI); // 100ms 간격 기준
       setAngleZ(prev => prev + deltaAngleZ);
       // 애니메이션 갱신 -- 안에 넣으면 애니메이션이 느려지긴 하는데 빼면 각도 조정이 안됨;;
@@ -318,13 +319,19 @@ function InsideRoute() {
       )}
 
       <View style={styles.imageContainer}>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
         {insideImage && (
-          <Image source={{uri: fullImagePath}} style={[styles.map]} />
+          <Image source={{ uri: fullImagePath }} style={[styles.map]} />
         )}
-        <Svg width={mapWidth} height={mapHeight} style={{position: 'absolute'}}>
+        <Svg width={mapWidth} height={mapHeight} style={{ position: 'absolute' }}>
           {currentCoordinates.length > 0 && (
             <Polyline
-              points={currentCoordinates.map(({x, y}) => `${x},${y}`).join(' ')}
+              points={currentCoordinates.map(({ x, y }) => `${x},${y}`).join(' ')}
               fill="none"
               stroke="red"
               strokeWidth="5"
@@ -337,8 +344,8 @@ function InsideRoute() {
             styles.image,
             {
               transform: [
-                {translateX: positionY},
-                {translateY: positionX},
+                { translateX: positionY },
+                { translateY: positionX },
                 {
                   rotateZ: rotationZ.interpolate({
                     inputRange: [-360, 360],
@@ -361,8 +368,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    justifyContent: 'center', // 이미지를 화면 중앙에 배치
-    alignItems: 'center', // 이미지를 화면 중앙에 배치
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   goBackButton: {
     position: 'absolute',
@@ -372,10 +379,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     marginTop: 80,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   map: {
-    width: mapWidth, // 지도의 크기
+    width: mapWidth,
     height: mapHeight,
     position: 'absolute',
   },
@@ -390,7 +397,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
     marginTop: 50,
-    marginBottom: -80,
+    marginBottom: -80
   },
   circleButton: {
     width: 50,
@@ -400,11 +407,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 10,
-    borderWidth: 2, // 검은색 테두리
+    borderWidth: 2,
     borderColor: '#000000',
   },
   activeButton: {
-    backgroundColor: '#0365C7', // 활성화 시 파란색 배경
+    backgroundColor: '#0365C7',
   },
   buttonText: {
     color: '#000000',
@@ -412,7 +419,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   activeButtonText: {
-    color: '#FFFFFF', // 활성화 시 흰색 텍스트
+    color: '#FFFFFF',
   },
 });
 

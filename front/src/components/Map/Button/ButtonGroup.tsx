@@ -25,9 +25,7 @@ function ButtonGroup() {
         waypoints,
       };
       const result = await postRoute(data);
-      console.log("보낸 데이터:", data);
       setResult(result);
-      console.log('Route posted successfully:', result);
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response) {
@@ -43,7 +41,7 @@ function ButtonGroup() {
         }
       } else {
         console.error('Error posting route:', error);
-        Alert.alert('알 수 없는 오류', '예상치 못한 오류가 발생');
+        Alert.alert('오류', '오류가 발생');
       }
     }
   };

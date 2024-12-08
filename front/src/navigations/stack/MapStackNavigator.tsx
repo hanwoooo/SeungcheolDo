@@ -1,12 +1,10 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { mapNavigations } from '@/constants';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import StationSearch from '@/screens/map/StationSearch';
 import StationInfo from '@/screens/map/StationInfo';
 import InsideRoute from '@/screens/map/InsideRoute';
-import { InsideStationImageURL } from '@/types/domain';
 
 export type MapStackParamList = {
   [mapNavigations.MAP_HOME]: { 
@@ -83,7 +81,5 @@ function MapStackNavigator() {
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({});
 
 export default MapStackNavigator;

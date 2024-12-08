@@ -17,9 +17,7 @@ function MapScreen({ onStationClick }: MapScreenProps) {
 
   const handleMapPress = (event: GestureResponderEvent) => {
     const { locationX, locationY } = event.nativeEvent;
-    console.log(`클릭한 위치: x=${locationX}, y=${locationY}`);
 
-    // 클릭한 위치와 가까운 역 검색
     const clickedStation = stations.find(
       (station) =>
         Math.abs(station.coords[0] - locationX) < 20 &&
@@ -27,11 +25,9 @@ function MapScreen({ onStationClick }: MapScreenProps) {
     );
 
     if (clickedStation) {
-      console.log(`감지된 역: ${clickedStation.id}`);
-      setSelectedStation(clickedStation); // 클릭한 역을 마커로 설정
-      onStationClick(clickedStation.id); // 선택된 역 이름 전달
+      setSelectedStation(clickedStation);
+      onStationClick(clickedStation.id);
     } else {
-      console.log("빈 공간을 클릭했습니다."); // 빈 공간 클릭 시 마커 제거
       setSelectedStation(null);
     }
   };
@@ -43,7 +39,7 @@ function MapScreen({ onStationClick }: MapScreenProps) {
         minZoom={0.85}
         zoomStep={0.3}
         initialZoom={1}
-        bindToBorders={true} // 경계를 활성화
+        bindToBorders={true}
         contentWidth={1383}
         contentHeight={982}
         style={styles.zoomableView}
@@ -57,13 +53,12 @@ function MapScreen({ onStationClick }: MapScreenProps) {
           style={styles.markerLayer}
           viewBox="0 0 1383 982"
         >
-          {/* 선택된 역에만 마커 표시 */}
           {selectedStation && (
             <CustomMarker
               stationName={selectedStation.id}
               coords={selectedStation.coords}
               isVisible={true}
-              onPress={() => onStationClick(selectedStation.id)} // 마커 클릭 시 호출
+              onPress={() => onStationClick(selectedStation.id)}
             />
           )}
         </Svg>

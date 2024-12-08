@@ -51,12 +51,10 @@ function MapHomeScreen() {
   }, [selectedStationName]);
 
   const onSelectStation = (type: 'departure' | 'arrival', stationName: string) => {
-    console.log(`Selected ${type} station: ${stationName}`);
     navigation.navigate(mapNavigations.STATION_INFO, { selectType: type, stationName });
   };
 
   const onStationClick = (stationName: string) => {
-    console.log(`Clicked station: ${stationName}`);
     setSelectedStationName(stationName);
   };
 

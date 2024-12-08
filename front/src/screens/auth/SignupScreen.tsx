@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   inputContainer: {
-    gap: 20, // 이건 좀 보고 수정
+    gap: 20,
     marginBottom: 30,
   },
   logo: {

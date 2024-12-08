@@ -5,17 +5,17 @@ import BookMark from "@/components/BookMark/BookMark";
 
 interface StationItemProps {
   stationName: string;
-  isFavorite?: boolean; // 즐겨찾기 여부
-  onAddFavorite?: () => void; // 즐겨찾기 추가 핸들러
-  onRemoveFavorite?: () => void; // 즐겨찾기 삭제 핸들러
+  isFavorite?: boolean;
+  onAddFavorite?: () => void;
+  onRemoveFavorite?: () => void;
 }
 
-const StationItem: React.FC<StationItemProps> = ({
+function StationItem({
   stationName,
   isFavorite = false,
   onAddFavorite,
   onRemoveFavorite,
-}) => {
+}: StationItemProps) {
   const handleToggleFavorite = () => {
     if (isFavorite) {
       onRemoveFavorite && onRemoveFavorite();

@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent } from 'react-native';
 
 interface ButtonProps {
-  text: string; // 버튼에 들어갈 텍스트
-  onPress?: (event: GestureResponderEvent) => void; // 클릭 이벤트 핸들러
+  text: string;
+  onPress?: (event: GestureResponderEvent) => void;
 }
 
-const StaButton: React.FC<ButtonProps> = ({ text, onPress }) => {
+function StaButton({ text, onPress }: ButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
 
-  const handlePressIn = () => setIsPressed(true); // 클릭 시작 시
-  const handlePressOut = () => setIsPressed(false); // 클릭 끝날 시
+  const handlePressIn = () => setIsPressed(true);
+  const handlePressOut = () => setIsPressed(false);
 
   return (
     <TouchableOpacity
@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.BLACK,
-    textAlign: 'left', // 텍스트 왼쪽 정렬
+    textAlign: 'left',
     fontSize: 16,
   },
   textPressed: {
-    color: colors.GRAY_500, // 클릭 시 텍스트 색상
+    color: colors.GRAY_500,
   },
 });
 

@@ -8,7 +8,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { MapStackParamList } from "@/navigations/stack/MapStackNavigator";
 import { MainDrawerParamList } from "@/navigations/drawer/MainDrawerNavigator";
 
-// DrawerNavigationProp 타입 정의
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
   DrawerNavigationProp<MainDrawerParamList>
@@ -20,9 +19,8 @@ function DrawerButton() {
   return (
     <>
       <Pressable
-        style={styles.drawerButton} // top 값을 고정
-
-        onPress={() => navigation.openDrawer()} // 드로어 열기
+        style={styles.drawerButton}
+        onPress={() => navigation.openDrawer()}
       >
         <Ionicons name="menu" size={40} color={colors.BLUE_700} />
       </Pressable>

@@ -14,6 +14,7 @@ interface InsideStationButtonProps {
 }
 
 type NavigationProp = StackNavigationProp<MapStackParamList, "StationInfo">;
+
 function InsideStationButton({ stationName, connectedStation, line, index }: InsideStationButtonProps) {
   const navigation = useNavigation<NavigationProp>();
   const { setInsideImage, setStationType } = useAuthContext();
@@ -24,12 +25,9 @@ function InsideStationButton({ stationName, connectedStation, line, index }: Ins
     } else {
       stationType = 'arrival';
     }
-    console.log("스테이션 이름: ", stationName, ", 스테이션 타입: ", stationType, ", 라인: ", line, ", 인덱스: ", index);
     const insideImage = await postInsideStationURL({ line, stationName, stationType });
-    console.log("결과: ", insideImage);
     setInsideImage(insideImage);
     setStationType(stationType);
-    console.log("연결된 역: ", connectedStation);
     navigation.navigate("InsideRoute", { line, stationName, connectedStation, insideImage, stationType });
   };
   return (

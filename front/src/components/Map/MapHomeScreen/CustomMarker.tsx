@@ -4,18 +4,18 @@ import { TouchableOpacity, StyleSheet, Text, View, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 interface CustomMarkerProps {
-  stationName: string; // 마커에 표시할 역 이름
-  coords: [number, number]; // 마커 위치 (x, y 좌표)
-  isVisible: boolean; // 마커 표시 여부
-  onPress: () => void; // 마커 클릭 시 실행될 함수
+  stationName: string;
+  coords: [number, number];
+  isVisible: boolean;
+  onPress: () => void;
 }
 
-const CustomMarker: React.FC<CustomMarkerProps> = ({
+function CustomMarker({
   stationName,
   coords,
   isVisible,
   onPress,
-}) => {
+}: CustomMarkerProps) {
   if (!isVisible) return null;
 
   return (

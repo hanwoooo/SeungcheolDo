@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
+import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants';
 
 interface CustomButtonProps extends PressableProps {
@@ -8,8 +8,6 @@ interface CustomButtonProps extends PressableProps {
   size?: 'large' | 'medium';
   inValid?: boolean;
 }
-
-const deviceHeight = Dimensions.get('screen').height;
 
 function CustomButton({
   label,

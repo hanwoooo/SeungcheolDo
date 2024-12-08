@@ -61,7 +61,7 @@ export const addFavorite = async ({stationName}: StationInformation) => {
 
 export const delFavorite = async ({ stationName }: StationInformation) => {
   const { data } = await apiClient.delete("/favorites", {
-    params: { stationName: stationName }, // 쿼리 파라미터에 데이터 포함
+    params: { stationName: stationName },
   });
   return data;
 };

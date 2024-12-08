@@ -9,9 +9,10 @@ interface WaypointControlsProps {
   onMinus: () => void;
 }
 
-const WaypointControls: React.FC<WaypointControlsProps> = ({ waypointsLength, onAdd, onMinus }) => (
-  <View style={styles.container}>
-    <TouchableOpacity
+function WaypointControls({ waypointsLength, onAdd, onMinus }: WaypointControlsProps) {
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
       style={[styles.button, waypointsLength >= 5 && styles.disabledButton]}
       onPress={onAdd}
       disabled={waypointsLength >= 5}
@@ -25,8 +26,9 @@ const WaypointControls: React.FC<WaypointControlsProps> = ({ waypointsLength, on
     >
       <MaterialIcons name="remove" size={50} color={waypointsLength === 0 ? colors.GRAY_300 : colors.GRAY_500} />
     </TouchableOpacity>
-  </View>
-);
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {

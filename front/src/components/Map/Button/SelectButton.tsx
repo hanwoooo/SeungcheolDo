@@ -2,14 +2,11 @@ import { colors } from '@/constants';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-// 색상 정의
-
-
 interface SelectButtonProps {
-  text: string; // 버튼 텍스트
+  text: string;
   size?: 'large' | 'medium';
-  isSelected: boolean; // 현재 선택 여부
-  onPress: () => void; // 버튼 클릭 이벤트
+  isSelected: boolean;
+  onPress: () => void;
 }
 
 function SelectButton({

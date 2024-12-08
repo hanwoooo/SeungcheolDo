@@ -8,7 +8,7 @@ interface BookMarkProps {
   onToggleFavorite: () => void;
 }
 
-const BookMark: React.FC<BookMarkProps> = ({ isFavorite, onToggleFavorite }) => {
+function BookMark({ isFavorite, onToggleFavorite }: BookMarkProps) {
   return (
     <TouchableOpacity onPress={onToggleFavorite} style={styles.container}>
       <Ionicons

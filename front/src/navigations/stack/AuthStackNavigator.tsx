@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AuthHomeScreen from '@/screens/auth/AuthHomeScreen';
 import { authNavigations } from '@/constants';
@@ -57,7 +56,5 @@ function AuthStackNavigator() {
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({});
 
 export default AuthStackNavigator;

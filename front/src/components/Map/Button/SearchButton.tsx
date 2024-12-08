@@ -4,7 +4,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DrawerButton from './DrawerButton';
 import { colors } from '@/constants/colors';
 
-
 interface SearchButtonProps {
   onPress: () => void;
 }
@@ -59,8 +58,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    justifyContent: 'center', // 세로 가운데 정렬
-    alignItems: 'flex-start', // 가로 왼쪽 정렬
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     marginLeft: 10,
   },
   buttonText: {
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   searchIcon: {
-    marginLeft: 10, // 버튼과 아이콘 간의 간격
+    marginLeft: 10,
   },
   buttonContainer: {
     marginLeft: 5,
