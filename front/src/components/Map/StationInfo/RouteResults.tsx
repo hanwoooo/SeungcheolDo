@@ -74,7 +74,7 @@ function RouteResults() {
         ))}
       </View>
       <View style={{
-        height: 700, flexDirection: 'row',
+        height: 100, flexDirection: 'row',
         justifyContent: 'space-between',
       }}>
         <Text style={{ color: colors.WHITE }}>도착 역 내부경로버튼 라인</Text>

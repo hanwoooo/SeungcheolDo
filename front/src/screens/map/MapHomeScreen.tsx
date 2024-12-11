@@ -80,7 +80,7 @@ function MapHomeScreen() {
           currentLine={currentLine}
           setCurrentLine={setCurrentLine}
           bottomSheetRef={bottomSheetRef}
-          snapPoints={['3%', '40%', '12%']}
+          snapPoints={['10%', '40%', '12%']}
           selectType={null}
           onSelectStation={onSelectStation}
         />

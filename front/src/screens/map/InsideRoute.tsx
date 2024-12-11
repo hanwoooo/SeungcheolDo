@@ -263,7 +263,7 @@ function InsideRoute() {
     );
 
     const gyroSubscription = gyroscope.subscribe(({z}: GyroscopeData) => {
-      const deltaAngleZ = z * 0.15 * (180 / Math.PI); // 100ms 간격 기준
+      const deltaAngleZ = z * 0.13 * (180 / Math.PI); // 100ms 간격 기준
       setAngleZ(prev => prev + deltaAngleZ);
       // 애니메이션 갱신 -- 안에 넣으면 애니메이션이 느려지긴 하는데 빼면 각도 조정이 안됨;;
       rotationZ.setValue(-kalman.update(angleZ));
@@ -275,7 +275,7 @@ function InsideRoute() {
     };
   }, [angleZ, lastMagnitude, currentPosition]);
 
-  const fullImagePath = `http://192.168.0.5:8080${insideImage}`;
+  const fullImagePath = `http://192.168.0.7:8080${insideImage}`;
 
   return (
     <View style={styles.container}>
